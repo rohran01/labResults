@@ -1,0 +1,9 @@
+node_modules
+config.json
+config.js
+.idea
+.DS_Store
+*.log
+npm-debug.log
+*.sass-cache
+.env
