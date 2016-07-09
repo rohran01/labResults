@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var passport = require('passport');
 var router = express.Router();
 
 //===================================
@@ -13,21 +14,20 @@ router.get('/doctorDashboard', function(request, response) {
   response.sendFile(path.join(__dirname, '../public/views/doctor/doctorDashboard.html'));
 });
 
+router.get('/register', function(request, response) {
+  response.sendFile(path.join(__dirname, '../public/views/register.html'));
+});
+
 router.get('/', function(request, response) {
   response.sendFile(path.join(__dirname, '../public/views/login.html'));
 });
 
-
-
-// router.get('/events', function(request, response){
-//   Schedule.find({}, function(error, events) {
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       response.send(events);
-//     }
-//   });
-// });
+router.post('/',
+    passport.authenticate('local', {
+        successRedirect: '/views/patientDashboard.html',
+        failureRedirect: '/views/index.html'
+    })
+);
 
 
 //===================================

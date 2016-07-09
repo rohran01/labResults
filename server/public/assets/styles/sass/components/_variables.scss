@@ -41,7 +41,10 @@ $secondary-color: color("teal", "lighten-1") !default;
 $success-color: color("green", "base") !default;
 $error-color: color("red", "base") !default;
 $link-color: color("light-blue", "darken-1") !default;
-
+$green: #9FD99F;
+$blue: #A8D8FF;
+$red: #EB9F9F;
+$yellow: #FFEC9F;
 
 /* 2. Badges
    ========================================================================== */
@@ -132,7 +135,8 @@ $dropdown-item-height: 50px !default;
 /* 9. Fonts
    ========================================================================== */
 
-$roboto-font-path: "../fonts/roboto/" !default;
+// $roboto-font-path: "../fonts/roboto/" !default;
+// $brusher-font-path: "../fonts/brusher/" !default;
 
 
 /* 10. Forms
@@ -223,8 +227,8 @@ $navbar-brand-font-size: 2.1rem !default;
    ========================================================================== */
 
 $sidenav-font-color: #444 !default;
-$sidenav-bg-color: #fff !default;
-$sidenav-padding-right: 30px !default;
+$sidenav-bg-color: $green !default;
+$sidenav-padding-right: 50px !default;
 $sidenav-item-height: 64px !default;
 
 

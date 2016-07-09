@@ -16,7 +16,8 @@
 @import "components/icons-material-design";
 @import "components/grid";
 @import "components/navbar";
-@import "components/roboto";
+// @import "components/roboto";  //TODO: Remove later
+@import "components/brusher";  //TODO: Update to make work later
 @import "components/typography";
 @import "components/cards";
 @import "components/toast";
@@ -38,3 +39,6 @@
 @import "components/date_picker/default";
 @import "components/date_picker/default.date";
 @import "components/date_picker/default.time";
+
+//import flaticon icons
+@import "components/icons/_flaticon";

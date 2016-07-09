@@ -10,8 +10,8 @@ module.exports = function(grunt) {
         },
         watch: {
             css: {
-                files: ['server/public/assets/styles/sass/*.scss'],
-                tasks: ['sass']
+                files: ['server/public/assets/styles/sass/*.scss', 'server/public/assets/styles/sass/components/*.scss'],
+                tasks: ['sass', 'uglify']
             },
             scripts: {
                 files: ['client/client.js', 'server/public/styles/sass/*.scss', 'server/public/styles/sass/**/*.scss'],

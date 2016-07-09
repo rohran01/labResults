@@ -5,6 +5,9 @@ a {
 
 html{
   line-height: 1.5;
+  font-family: "Quicksand", sans-serif;
+  font-weight: normal;
+  color: $off-black;
 
   @media only screen and (min-width: 0) {
     font-size: 14px;
@@ -18,11 +21,10 @@ html{
     font-size: 15px;
   }
 
-  font-family: "Roboto", sans-serif;
-  font-weight: normal;
-  color: $off-black;
+
 }
 h1, h2, h3, h4, h5, h6 {
+  font-family: "Marck Script", cursive;
 	font-weight: 400;
 	line-height: 1.1;
 }
