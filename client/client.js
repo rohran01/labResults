@@ -1,6 +1,6 @@
 var app = angular.module('labResults', []);
 
-app.controller('loginController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+app.controller('loginController', ['$scope', '$http', '$window', 'AuthService', function($scope, $http, $window, AuthService) {
 
   var user = {};
 
@@ -8,22 +8,37 @@ app.controller('loginController', ['$scope', '$http', '$window', function($scope
 
   $scope.login = function() {
 
-    user = {
-      username: $scope.username,
-      password: $scope.password
-    };
+    user = $scope.user;
+    AuthService.login(user).then(function() {
+      var serviceUser = AuthService.isLoggedIn;
+      console.log(serviceUser);
+      // if (AuthService.user.patientflag && AuthService.userIsLoggedIn) {
+      //   window.location = '/patientDashboard';
+      // } else if (AuthService.user.doctorflag && AuthService.userIsLoggedIn) {
+      //   window.location = '/doctorDashboard';
+      // }
+    })
 
-    console.log(user);
-  };
 
-  // $http.get('/').then(function(response) {
-  //         if(response.data) {
-  //             $scope.userName = response.data.username;
-  //             console.log('User Data: ', $scope.userName);
-  //         } else {
-  //             $window.location.href = '/index.html';
-  //         }
-  //     });
+  }
+
+  //   $http.post('/login', this.user).then(function(response) {
+  //     if(response.data) {
+  //       console.log(response.data);
+  //       if(response.data.error) {
+  //         alert(response.data.message);                                     //TODO: Improve user alerts
+  //       } else if(response.data.user.patientflag) {
+  //         window.location = '/patientDashboard'
+  //       } else if(response.data.user.doctorflag) {
+  //         window.location = '/doctorDashboard'
+  //       }
+  //     } else {
+  //       alert('There was an error in the login process. Please try again.')    //TODO: Improve user alerts
+  //       console.log('error');
+  //     }
+  //   })
+  // }
+
 
   $scope.registrationRedirect = function(){
     window.location = "/register";
@@ -45,21 +60,17 @@ app.controller('registerController', ['$scope', '$http', '$window', function($sc
 
     $http.post('/register', this.user).then(function(response) {
       if(response.data) {
-        console.log(response.data);
+        if (response.data.name == 'error') {
+            alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
+          } else {
+            alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
+            $window.location = "/";
+          }
       } else {
         console.log('error');
       }
     })
   };
-
-  // $http.get('/').then(function(response) {
-  //         if(response.data) {
-  //             $scope.userName = response.data.username;
-  //             console.log('User Data: ', $scope.userName);
-  //         } else {
-  //             $window.location.href = '/index.html';
-  //         }
-  //     });
 
   $scope.loginRedirect = function(){
     window.location = "/";
@@ -79,6 +90,120 @@ app.controller('doctorDashboardController', ['$scope', 'anchorSmoothScroll', fun
     // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
+}]);
+
+app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
+
+    // create user variable
+    var userIsLoggedIn = null;
+    var user = {};
+
+    // return available functions for use in the controllers
+    return ({
+      isLoggedIn: isLoggedIn,
+      getUserStatus: getUserStatus,
+      login: login,
+      logout: logout,
+      register: register,
+      userInfo: userInfo
+    });
+
+    function userInfo() {
+      console.log('userInfo hit');
+      return user;
+    }
+
+
+    function isLoggedIn() {
+      if(userIsLoggedIn) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function getUserStatus() {
+      return user;
+    }
+
+    function login(user) {
+      console.log('login service hit');
+    // create a new instance of deferred
+      var deferred = $q.defer();
+      // send a post request to the server
+      $http.post('/login', user)
+        // handle success
+        .success(function (data, status) {
+          if(status === 200){
+            console.log('success');
+            userIsLoggedIn = true;
+            user = data;
+            console.log('user in service', user)
+            deferred.resolve();
+
+          } else {
+            console.log(data);
+            console.log('error in success')
+            userIsLoggedIn = false;
+            user = null;
+            deferred.reject();
+          }
+        })
+        // handle error
+        .error(function (data) {
+          console.log('error in error');
+          userIsLoggedIn = false;
+          user = null;
+          deferred.reject();
+        });
+      // return promise object
+      return deferred.promise;
+    };
+
+    function logout() {
+    // create a new instance of deferred
+      var deferred = $q.defer();
+      // send a get request to the server
+      $http.get('/logout')
+        // handle success
+        .success(function (data) {
+          user = false;
+          deferred.resolve();
+        })
+        // handle error
+        .error(function (data) {
+          user = false;
+          deferred.reject();
+        });
+
+    // return promise object
+      return deferred.promise;
+
+    };
+
+    function register(user) {
+    // create a new instance of deferred
+      var deferred = $q.defer();
+    // send a post request to the server
+      $http.post('/register', user)
+        // handle success
+        .success(function (data, status) {
+          if(status === 200){
+            alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
+            $window.location = "/";
+            deferred.resolve();
+          } else {
+            alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
+            deferred.reject();
+          }
+        })
+        // handle error
+        .error(function (data) {
+          deferred.reject();
+        });
+      // return promise object
+      return deferred.promise;
+    };
 }]);
 
 app.service('anchorSmoothScroll', function(){

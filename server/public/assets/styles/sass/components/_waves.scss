@@ -63,10 +63,10 @@
     }
 
     &.waves-red .waves-ripple {
-      background-color: rgba(244, 67, 54, .70);
+      background-color: $red;
     }
     &.waves-yellow .waves-ripple {
-      background-color: rgba(255, 235, 59, .70);
+      background-color: $yellow;
     }
     &.waves-orange .waves-ripple {
       background-color: rgba(255, 152, 0, .70);
@@ -75,7 +75,10 @@
       background-color: rgba(156, 39, 176, 0.70);
     }
     &.waves-green .waves-ripple {
-      background-color: rgba(76, 175, 80, 0.70);
+      background-color: $green;
+    }
+    &.waves-blue .waves-ripple {
+      background-color: $blue;
     }
     &.waves-teal .waves-ripple {
       background-color: rgba(0, 150, 136, 0.70);

@@ -20,7 +20,6 @@
 
 <body ng-controller="registerController">
 
-
   <div class="section">
     <div class="container">
       <h2 class="header">{{title}}</h2>
@@ -58,7 +57,7 @@
             <div class="input-field col s12">
               <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
               <i class="material-icons prefix">date_range</i>
-              <input  ng-model="user.birthdate" id="birthdate" type="date" class="datepicker validate" />
+              <input  ng-model="user.birthdate" id="birthdate" type="date" class="datepicker" />
               <label for="birthdate">Birthdate</label>
             </div>
           </div>
@@ -106,11 +105,6 @@
       </div>
     </div>
   </div>
-  <!-- <div ng-if="userLoggedIn.loggedIn" ng-include src="'views/header.html'"></div>
-
-
-  </div> -->
-
 
 </body>
 </html>

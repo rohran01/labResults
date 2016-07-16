@@ -33,18 +33,20 @@
 /* 1. Colors
    ========================================================================== */
 
-$primary-color: color("materialize-red", "lighten-2") !default;
-$primary-color-light: lighten($primary-color, 15%) !default;
-$primary-color-dark: darken($primary-color, 15%) !default;
 
-$secondary-color: color("teal", "lighten-1") !default;
-$success-color: color("green", "base") !default;
-$error-color: color("red", "base") !default;
-$link-color: color("light-blue", "darken-1") !default;
 $green: #9FD99F;
 $blue: #A8D8FF;
 $red: #EB9F9F;
 $yellow: #FFEC9F;
+
+$primary-color: $blue !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+
+$secondary-color: $blue !default;
+$success-color: $green !default;
+$error-color: $red !default;
+$link-color: color("light-blue", "darken-1") !default;
 
 /* 2. Badges
    ========================================================================== */

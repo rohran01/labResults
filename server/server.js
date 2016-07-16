@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 
 // var authenticate = require('./routes/authentication');
 var index = require('./routes/index');
+var login = require('./routes/login');
 var register = require('./routes/register');
 // var patientDashboard = require('./routes/patientDashboard');
 // var doctorDashboard = require('./routes/doctorDashboard');
@@ -82,6 +83,7 @@ app.use(express.static('server/public'));
 // app.use('/respond', respond);
 // app.use('/patientDashboard', patientDashboard);
 // app.use('/doctorDashboard', doctorDashboard);
+app.use('/login', login);
 app.use('/register', register);
 app.use('/', index);
 

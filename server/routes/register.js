@@ -18,8 +18,7 @@ router.get('/', function(req, res, next) {
 
 // Handles POST request with new user data
 router.post('/', function(req, res, next) {
-  console.log('register post hit');
-  console.log('req.body', req.body);
+
   var saveUser = {
     username: req.body.username,
     password: encryptLib.encryptPassword(req.body.password),
@@ -31,23 +30,22 @@ router.post('/', function(req, res, next) {
     birthdate: req.body.birthdate,
     patientflag: 1
   };
-  console.log('new user:', saveUser);
 
   pg.connect(connection, function(err, client, done) {
-    client.query("INSERT INTO userprofile (username, password, firstName, lastName, phone, email, gender, birthdate, patientflag) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id",
+
+    client.query('INSERT INTO userprofile (username, password, firstName, lastName, phone, email, gender, birthdate, patientflag)     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
       [saveUser.username, saveUser.password, saveUser.firstName, saveUser.lastName, saveUser.phone, saveUser.email, saveUser.gender, saveUser.birthdate, saveUser.patientflag],
-        function (err, result) {
-          client.end();
+      function (err, result) {
+        client.end();
 
-          if(err) {
-            console.log("Error inserting data: ", err);
-            next(err);
-          } else {
-            res.redirect('/');
-          }
-        });
+        if(err) {
+          res.status(500).send("Error inserting data: ", err);
+        } else {
+          console.log('else hit');
+          res.redirect('/');
+        }
+    })
   });
-
 });
 
 

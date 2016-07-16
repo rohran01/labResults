@@ -22,12 +22,12 @@ router.get('/', function(request, response) {
   response.sendFile(path.join(__dirname, '../public/views/login.html'));
 });
 
-router.post('/',
-    passport.authenticate('local', {
-        successRedirect: '/views/patientDashboard.html',
-        failureRedirect: '/views/index.html'
-    })
-);
+// router.post('/',
+//     passport.authenticate('local', {
+//         successRedirect: '/views/patientDashboard.html',
+//         failureRedirect: '/views/index.html'
+//     })
+// );
 
 
 //===================================
