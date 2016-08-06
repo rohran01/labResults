@@ -5,8 +5,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 // var mongoose = require('mongoose');
-// var session = require('express-session');
-// var passport = require('./authentication');
+var session = require('express-session');
+var passport = require('passport');
 
 //=================================================
 // Routes
@@ -23,17 +23,6 @@ var register = require('./routes/register');
 // var respond = require('./routes/respond.js');
 var app = express();
 
-/////////////////////////////////////////////////////////
-/////////////////////  for testing //////////////////////
-/////////////////////////////////////////////////////////
-// console.log('User Env variable: ', process.env.EM_USER);
-
-
-// var nodemailer = require('nodemailer');
-// var sendEmail = require('./nodemailer');
-// sendEmail.sendMessage();           //sends email message
-/////////////////////////////////////////////////////////
-
 //=================================================
 // body parser middleware
 
@@ -41,42 +30,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //=================================================
-//Starting connection to Mongo Database either best choice or local host
-
-// var mongoURI = process.env.DATABASE_URL || 'mongodb://localhost:27017/veggiekart';
-// var mongoDB = mongoose.connect(mongoURI).connection;
-//
-// mongoDB.on('error', function(err){
-//   console.log('MongoDB error: ', err);
-// });
-//
-// mongoDB.on('open', function(){
-//   console.log('MongoDB connected!');
-// });
-
-//=================================================
 // use and configure server sessions
 
-// app.use(session({
-//   secret: 'secret',
-//   key: 'user',
-//   resave: true,
-//   saveUninitialized: false,
-//   cookie: {
-//     maxAge: 600000,
-//     secure: false
-//   }
-// }));
+app.use(session({
+  secret: 'secret',
+  key: 'user',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 600000,
+    secure: false
+  }
+}));
 
 //=================================================
 // initialize passport
 
 // passport.init(app);
+app.use(passport.initialize());
+app.use(passport.session());
 
 //=================================================
 // Middleware and routes
 app.use(express.static('server/public'));
-// app.use('/salad', salad);
 // app.use('/authenticate', authenticate);
 // app.use('/createRequest', createRequest);
 // app.use('/requestRecipients', recipients);

@@ -1,6 +1,33 @@
-var app = angular.module('labResults', []);
+var app = angular.module('labResults', ['ngRoute']);
 
-app.controller('loginController', ['$scope', '$http', '$window', 'AuthService', function($scope, $http, $window, AuthService) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $routeProvider
+        .when('/', {
+        //   console.log('/ partial hit');
+            templateUrl: 'views/login.html',
+            controller: 'loginController'
+        })
+        .when('/register', {
+            templateUrl: 'views/register.html',
+            controller: 'registerController'
+        })
+        .when('/login', {
+            templateUrl: 'views/login.html',
+            controller: 'loginController'
+        })
+        .when('/patientDashboard', {
+            templateUrl: 'views/patientDashboard.html',
+            controller: 'patientDashboardController'
+        })
+        .when('/doctorDashboard', {
+            templateUrl: 'views/doctorDashboard.html',
+            controller: 'doctorDashboardController'
+        });
+
+    $locationProvider.html5Mode(true);
+}]);
+
+app.controller('loginController', ['$scope', '$http', '$location', 'AuthService', function($scope, $http, $location, AuthService) {
 
   var user = {};
 
@@ -10,43 +37,30 @@ app.controller('loginController', ['$scope', '$http', '$window', 'AuthService', 
 
     user = $scope.user;
     AuthService.login(user).then(function() {
-      var serviceUser = AuthService.isLoggedIn;
-      console.log(serviceUser);
-      // if (AuthService.user.patientflag && AuthService.userIsLoggedIn) {
-      //   window.location = '/patientDashboard';
-      // } else if (AuthService.user.doctorflag && AuthService.userIsLoggedIn) {
-      //   window.location = '/doctorDashboard';
-      // }
+      var serviceUser = AuthService.getUserStatus();
+      console.log('logged in?', AuthService.isLoggedIn());
+      console.log('patient flag?', serviceUser.patientflag);
+      if (serviceUser.patientflag && AuthService.isLoggedIn) {
+        $location.path('patientDashboard');
+      } else if (serviceUser.doctorflag && AuthService.isLoggedIn) {
+        $location.path('doctorDashboard');
+      }
+    }).then(function() {
+      console.log('user info', AuthService.getUserStatus());
     })
 
 
   }
 
-  //   $http.post('/login', this.user).then(function(response) {
-  //     if(response.data) {
-  //       console.log(response.data);
-  //       if(response.data.error) {
-  //         alert(response.data.message);                                     //TODO: Improve user alerts
-  //       } else if(response.data.user.patientflag) {
-  //         window.location = '/patientDashboard'
-  //       } else if(response.data.user.doctorflag) {
-  //         window.location = '/doctorDashboard'
-  //       }
-  //     } else {
-  //       alert('There was an error in the login process. Please try again.')    //TODO: Improve user alerts
-  //       console.log('error');
-  //     }
-  //   })
-  // }
-
 
   $scope.registrationRedirect = function(){
-    window.location = "/register";
+    console.log('clicked!');
+    $location.path('register');
   }
 
 }]);
 
-app.controller('registerController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+app.controller('registerController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 
   var user = {};
 
@@ -64,7 +78,7 @@ app.controller('registerController', ['$scope', '$http', '$window', function($sc
             alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
           } else {
             alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-            $window.location = "/";
+            $location.path();
           }
       } else {
         console.log('error');
@@ -73,13 +87,24 @@ app.controller('registerController', ['$scope', '$http', '$window', function($sc
   };
 
   $scope.loginRedirect = function(){
-    window.location = "/";
+    $location.path();
   }
 
 }]);
 
-app.controller('patientDashboardController', ['$scope', 'anchorSmoothScroll', function($scope, anchorSmoothScroll) {
+app.controller('patientDashboardController', ['$scope', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $location, anchorSmoothScroll, AuthService) {
+
+  $scope.currentUser = AuthService.getUserStatus();
+  console.log('dashboard user', $scope.currentUser);
+  // console.log($scope.currentUser);
+
+  $scope.logout = function() {
+    AuthService.logout();
+    $location.path('');
+  }
+
   $scope.goTo = function(locationId) {
+
     // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
@@ -96,7 +121,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
 
     // create user variable
     var userIsLoggedIn = null;
-    var user = {};
+    var User;
 
     // return available functions for use in the controllers
     return ({
@@ -105,7 +130,8 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
       login: login,
       logout: logout,
       register: register,
-      userInfo: userInfo
+      userInfo: userInfo,
+      User: User
     });
 
     function userInfo() {
@@ -115,7 +141,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
 
 
     function isLoggedIn() {
-      if(userIsLoggedIn) {
+      if(userIsLoggedIn != null) {
         return true;
       } else {
         return false;
@@ -123,7 +149,8 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
     }
 
     function getUserStatus() {
-      return user;
+      console.log(User);
+      return User;
     }
 
     function login(user) {
@@ -137,7 +164,8 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
           if(status === 200){
             console.log('success');
             userIsLoggedIn = true;
-            user = data;
+            console.log('data', data.id);
+            User = data;
             console.log('user in service', user)
             deferred.resolve();
 
@@ -160,21 +188,29 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
       return deferred.promise;
     };
 
+
+
+
     function logout() {
+      User = {};
+      isLoggedIn = false;
+      console.log(User);
+
     // create a new instance of deferred
       var deferred = $q.defer();
       // send a get request to the server
-      $http.get('/logout')
-        // handle success
-        .success(function (data) {
-          user = false;
-          deferred.resolve();
-        })
-        // handle error
-        .error(function (data) {
-          user = false;
-          deferred.reject();
-        });
+      // $http.get('/logout')
+      //   // handle success
+      //   .success(function (data) {
+      //     user = false;
+      //     $location.path();
+      //     deferred.resolve();
+      //   })
+      //   // handle error
+      //   .error(function (data) {
+      //     user = false;
+      //     deferred.reject();
+      //   });
 
     // return promise object
       return deferred.promise;
@@ -190,7 +226,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
         .success(function (data, status) {
           if(status === 200){
             alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-            $window.location = "/";
+            $location.path();
             deferred.resolve();
           } else {
             alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts

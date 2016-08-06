@@ -6,20 +6,21 @@ var router = express.Router();
 //===================================
 //All get routes that send to html view
 
-router.get('/patientDashboard', function(request, response) {
-  response.sendFile(path.join(__dirname, '../public/views/patient/patientDashboard.html'));
-});
-
-router.get('/doctorDashboard', function(request, response) {
-  response.sendFile(path.join(__dirname, '../public/views/doctor/doctorDashboard.html'));
-});
-
-router.get('/register', function(request, response) {
-  response.sendFile(path.join(__dirname, '../public/views/register.html'));
-});
+// router.get('/patientDashboard', function(request, response) {
+//   response.sendFile(path.join(__dirname, '../public/views/patient/patientDashboard.html'));
+// });
+//
+// router.get('/doctorDashboard', function(request, response) {
+//   response.sendFile(path.join(__dirname, '../public/views/doctor/doctorDashboard.html'));
+// });
+//
+// router.get('/register', function(request, response) {
+//   response.sendFile(path.join(__dirname, '../public/views/register.html'));
+// });
 
 router.get('/', function(request, response) {
-  response.sendFile(path.join(__dirname, '../public/views/login.html'));
+  console.log('sending to index');
+  response.sendFile(path.join(__dirname, '../public/views/index.html'));
 });
 
 // router.post('/',
