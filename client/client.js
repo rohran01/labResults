@@ -78,7 +78,11 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
             alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
           } else {
             alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
+<<<<<<< HEAD
             $location.path();
+=======
+            $location.path('');
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
           }
       } else {
         console.log('error');
@@ -87,12 +91,20 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
   };
 
   $scope.loginRedirect = function(){
+<<<<<<< HEAD
     $location.path();
+=======
+    $location.path('');
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
   }
 
 }]);
 
+<<<<<<< HEAD
 app.controller('patientDashboardController', ['$scope', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $location, anchorSmoothScroll, AuthService) {
+=======
+app.controller('patientDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 
   $scope.currentUser = AuthService.getUserStatus();
   console.log('dashboard user', $scope.currentUser);
@@ -110,11 +122,53 @@ app.controller('patientDashboardController', ['$scope', '$location', 'anchorSmoo
   };
 }]);
 
+<<<<<<< HEAD
 app.controller('doctorDashboardController', ['$scope', 'anchorSmoothScroll', function($scope, anchorSmoothScroll) {
+=======
+app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
+
+  $scope.createDoctor = false;
+  $scope.doctorList = [];
+  console.log($scope.createDoctor);
+
+  function doctorList()
+  {
+    $http.get('/doctorDashboard/doctorList').then(function(response) {
+      console.log('doctor list:', response)
+      $scope.doctorList = response.data;
+    })
+  };
+
+  $scope.currentUser = AuthService.getUserStatus();
+
+  if ($scope.currentUser.adminflag)
+  {
+    $scope.admin = true;
+  }
+
+  $scope.createDoctor = function() {
+    var doctorToAdd = $scope.doctor;
+    console.log(doctorToAdd);
+
+  }
+
+  $scope.logout = function() {
+    //TODO: create proper logout service
+    AuthService.logout();
+    $location.path('');
+  }
+
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
   $scope.goTo = function(locationId) {
     // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
+<<<<<<< HEAD
+=======
+
+  doctorList();
+
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 }]);
 
 app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
@@ -250,7 +304,11 @@ app.service('anchorSmoothScroll', function(){
         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 
         var startY = currentYPosition();
+<<<<<<< HEAD
         var stopY = elmYPosition(locationId) - 21;
+=======
+        var stopY = elmYPosition(locationId);
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
         var distance = stopY > startY ? stopY - startY : startY - stopY;
         if (distance < 100) {
             scrollTo(0, stopY); return;

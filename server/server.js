@@ -16,7 +16,11 @@ var index = require('./routes/index');
 var login = require('./routes/login');
 var register = require('./routes/register');
 // var patientDashboard = require('./routes/patientDashboard');
+<<<<<<< HEAD
 // var doctorDashboard = require('./routes/doctorDashboard');
+=======
+var doctorDashboard = require('./routes/doctorDashboard');
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 // var salad = require('./routes/saladDocument');
 // var createRequest = require('./routes/requestDocument');
 // var recipients = require('./routes/recipients');
@@ -58,7 +62,11 @@ app.use(express.static('server/public'));
 // app.use('/requestRecipients', recipients);
 // app.use('/respond', respond);
 // app.use('/patientDashboard', patientDashboard);
+<<<<<<< HEAD
 // app.use('/doctorDashboard', doctorDashboard);
+=======
+app.use('/doctorDashboard', doctorDashboard);
+>>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 app.use('/login', login);
 app.use('/register', register);
 app.use('/', index);
