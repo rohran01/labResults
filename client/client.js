@@ -95,9 +95,41 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
 
 app.controller('patientDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
+  $scope.myFoodsList = [];
+  $scope.diaryList = [];
+  $scope.libraryList = [];
+  $scope.myDoctor = {};
   $scope.currentUser = AuthService.getUserStatus();
   console.log('dashboard user', $scope.currentUser);
   // console.log($scope.currentUser);
+
+  function myFoodsList()
+  {
+    $http.get('/patientDashboard/myFoodsList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.myFoodsList = response.data;
+    });
+  }
+
+  function diaryList()
+  {
+    $http.get('/patientDashboard/diaryList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.diaryList = response.data;
+    });
+  }
+
+  function libraryList()
+  {
+    $http.get('/patientDashboard/libraryList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.libraryList = response.data;
+    });
+  }
+
+  function myDoctor()
+  {
+    $http.get('/patientDashboard/myDoctor/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.myDoctor = response.data;
+    });
+  }
 
   $scope.logout = function() {
     AuthService.logout();
@@ -105,10 +137,18 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
   };
 
   $scope.goTo = function(locationId) {
-
-    // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
+
+  function initializePage() {
+    myFoodsList();
+    diaryList();
+    libraryList();
+    myDoctor();
+  }
+
+  // initializePage();
+
 }]);
 
 app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
@@ -116,38 +156,56 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   // $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
   $scope.createDoctor = false;
   $scope.myPatientList = [];
+  $scope.managePatientsList = [];
+  $scope.resourcesList = [];
+  $scope.encouragementList = [];
   $scope.doctorList = [];
   $scope.doctorList = [{firstname: 'Martha', lastname: 'Johnson'}, {firstname: 'Loretta', lastname: 'Bergeron'}, {firstname: 'Jane', lastname: 'Horowitz'}];
-  console.log($scope.createDoctor);
 
-
-
-  function patientList()
+  function myPatientList()
   {
-    $http.get('/doctorDashboard/patientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-      console.log('patient list:', response);
+    $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
       $scope.myPatientList = response.data;
+    });
+  }
+
+  function managePatientsList()
+  {
+    $http.get('/doctorDashboard/managePatientsList').then(function(response) {
+      $scope.managePatientsList = response.data;
+    });
+  }
+
+  function resourcesList()
+  {
+    $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.resourcesList = response.data;
+    });
+  }
+
+  function encouragementList()
+  {
+    $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+      $scope.encouragementList = response.data;
     });
   }
 
   function doctorList()
   {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
-      console.log('doctor list:', response);
       $scope.doctorList = response.data;
     });
   }
-
 
   // if ($scope.currentUser.adminflag)
   // {
   //   $scope.admin = true;
   // }
+  $scope.admin = true;                  //TODO: switch this out -- only for remote development
 
   $scope.createDoctor = function() {
     var doctorToAdd = $scope.doctor;
     console.log(doctorToAdd);
-
   };
 
   $scope.logout = function() {
@@ -157,11 +215,18 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   };
 
   $scope.goTo = function(locationId) {
-    // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
 
-  // doctorList();     //TODO: uncomment -- commented out for remote testing
+  function initializePage() {
+    myPatientList();
+    managePatientsList();
+    resourcesList();
+    encouragementList();
+    doctorList();
+  }
+
+  // initializePage();     //TODO: uncomment -- commented out for remote testing
 
 }]);
 

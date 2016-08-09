@@ -15,10 +15,9 @@
     <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0px);">
       <li class="dashboard-title">Dashboard</li>
       <li class="bold" ng-click="goTo('myPatients')" ><a class="waves-effect waves-dark">My Patients</a></li>
-      <li class="bold" ng-click="goTo('managePatients')" ><a class="waves-effect waves-dark">Manage Patients</a></li>
+      <li ng-if="admin" class="bold" ng-click="goTo('managePatients')" ><a class="waves-effect waves-dark">Manage Patients</a></li>
       <li class="bold" ng-click="goTo('manageResources')" ><a class="waves-effect waves-dark">Manage Resources</a></li>
       <li class="bold" ng-click="goTo('encouragementCentral')" ><a class="waves-effect waves-dark">Encouragement Central</a></li>
-      <li class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
       <li ng-if="admin" class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
     </ul>
   </header>
@@ -42,7 +41,7 @@
             </ul>
           </div>
 
-          <div id="managePatients" class="section scrollspy">
+          <div ng-if="admin" id="managePatients" class="section scrollspy">
             <h4>Manage Patients</h4>
 
           </div>
@@ -56,7 +55,7 @@
             <h4>Encouragement Central</h4>
 
           </div>
-          <div id="manageDoctors" class="section scrollspy">
+          <div ng-if="admin" id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
 
             <ul collapse class="collapsible popout" data-collapsible="expandable">
@@ -136,12 +135,3 @@
       </div>
     </div>
   </main>
-
-
-<!-- <script>
-  $(document).ready(function(){
-    $('.collapsible').collapsible({
-      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-    });
-  });
-</script> -->
