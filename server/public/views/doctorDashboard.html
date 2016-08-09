@@ -1,38 +1,14 @@
-<!-- <!DOCTYPE html>
-<html lang="en" ng-app="labResults">
-<head>
-  <meta charset="UTF-8">
-  <title>Lab Results Application</title>
-
-  <link href='https://fonts.googleapis.com/css?family=Marck+Script' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="assets/styles/main.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="assets/styles/sass/componenets/icons/flaticon.css"> -->
-  <!-- <script src="vendor/angular/angular.min.js" type="text/javascript"></script>
-  <script src="vendor/angular-route/angular-route.min.js"></script>
-  <script src="vendor/jquery/dist/jquery.min.js" type="text/javascript"></script>
-  <script src="assets/scripts/client.min.js" type="text/javascript"></script>
-  <script src="assets/scripts/js/bin/materialize.min.js" type="text/javascript"></script>
-
-
-  <base href="/">
-</head>
-
-<body ng-controller="doctorDashboardController"> -->
+<!DOCTYPE html>
 
   <header>
     <nav class="top-nav">
       <div class="container">
         <div class="nav-wrapper">
-<<<<<<< HEAD
           <a class="page-title">Welcome, {{user.firstName}} {{user.lastName}}!</a>
-=======
           <a class="left page-title">Welcome, {{currentUser.firstname}} {{currentUser.lastname}}!</a>
           <ul class="right hide-on-med-and-down">
             <li><a ng-click="logout()" class="waves-effect waves-dark">Logout</a></li>
           </ul>
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
         </div>
       </div>
     </nav>
@@ -42,11 +18,8 @@
       <li class="bold" ng-click="goTo('managePatients')" ><a class="waves-effect waves-dark">Manage Patients</a></li>
       <li class="bold" ng-click="goTo('manageResources')" ><a class="waves-effect waves-dark">Manage Resources</a></li>
       <li class="bold" ng-click="goTo('encouragementCentral')" ><a class="waves-effect waves-dark">Encouragement Central</a></li>
-<<<<<<< HEAD
       <li class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
-=======
       <li ng-if="admin" class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
     </ul>
   </header>
 
@@ -72,12 +45,8 @@
             <h4>Encouragement Central</h4>
 
           </div>
-
-<<<<<<< HEAD
           <div id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
-
-=======
           <div ng-if="admin" id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
 
@@ -152,30 +121,12 @@
 
             </div>
 
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
           </div>
 
         </div>
       </div>
     </div>
   </main>
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
-  <!-- <div ng-if="userLoggedIn.loggedIn" ng-include src="'views/header.html'"></div>
-
-
-  </div>
-
-
-
-</body>
-</html> -->
-<<<<<<< HEAD
-=======
 
 
 <script>
@@ -185,4 +136,3 @@
     });
   });
 </script>
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896

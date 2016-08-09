@@ -113,7 +113,7 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 
 app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
-  var doctorID = AuthService.getUserStatus.userID;
+  $scope.currentUser = AuthService.getUserStatus();
   $scope.createDoctor = false;
   $scope.patientList = [];
   $scope.doctorList = [];
@@ -122,7 +122,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
 
   function patientList()
   {
-    $http.get('/doctorDashboard/patientList/:doctorID').then(function(response) {
+    $http.get('/doctorDashboard/patientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
       console.log('patient list:', response);
       $scope.patientList = response.data;
     });
@@ -136,7 +136,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
     });
   }
 
-  $scope.currentUser = AuthService.getUserStatus();
 
   if ($scope.currentUser.adminflag)
   {
@@ -313,7 +312,7 @@ app.service('anchorSmoothScroll', function(){
                 leapY += step; if (leapY > stopY) leapY = stopY; timer++;
             } return;
         }
-        for ( var i = startY; i > stopY; i -= step) {
+        for (var i = startY; i > stopY; i -= step) {
             setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
             leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
         }
@@ -333,7 +332,7 @@ app.service('anchorSmoothScroll', function(){
             var elm = document.getElementById(locationId);
             var y = elm.offsetTop;
             var node = elm;
-            while (node.offsetParent && node.offsetParent != document.body) {
+            while (node.offsetParent && node.offsetParent !== document.body) {
                 node = node.offsetParent;
                 y += node.offsetTop;
             } return y;

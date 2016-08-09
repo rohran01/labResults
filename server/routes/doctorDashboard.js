@@ -38,6 +38,7 @@ router.get('patientList/:id', function(req, res, next) {
     if(err) {
       console.log(err);
     }
+  });
 
 });
 
