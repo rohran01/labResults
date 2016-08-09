@@ -47,16 +47,14 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
       }
     }).then(function() {
       console.log('user info', AuthService.getUserStatus());
-    })
-
-
-  }
+    });
+  };
 
 
   $scope.registrationRedirect = function(){
     console.log('clicked!');
     $location.path('register');
-  }
+  };
 
 }]);
 
@@ -74,37 +72,28 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
 
     $http.post('/register', this.user).then(function(response) {
       if(response.data) {
-        if (response.data.name == 'error') {
+        if (response.data.name === 'error') {
             alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
           } else {
             alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-<<<<<<< HEAD
-            $location.path();
-=======
+
             $location.path('');
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
+
           }
       } else {
         console.log('error');
       }
-    })
+    });
   };
 
   $scope.loginRedirect = function(){
-<<<<<<< HEAD
-    $location.path();
-=======
+
     $location.path('');
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
-  }
+  };
 
 }]);
 
-<<<<<<< HEAD
-app.controller('patientDashboardController', ['$scope', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $location, anchorSmoothScroll, AuthService) {
-=======
 app.controller('patientDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 
   $scope.currentUser = AuthService.getUserStatus();
   console.log('dashboard user', $scope.currentUser);
@@ -113,7 +102,7 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
   $scope.logout = function() {
     AuthService.logout();
     $location.path('');
-  }
+  };
 
   $scope.goTo = function(locationId) {
 
@@ -122,22 +111,30 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
   };
 }]);
 
-<<<<<<< HEAD
-app.controller('doctorDashboardController', ['$scope', 'anchorSmoothScroll', function($scope, anchorSmoothScroll) {
-=======
 app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
+  var doctorID = AuthService.getUserStatus.userID;
   $scope.createDoctor = false;
+  $scope.patientList = [];
   $scope.doctorList = [];
   console.log($scope.createDoctor);
+
+
+  function patientList()
+  {
+    $http.get('/doctorDashboard/patientList/:doctorID').then(function(response) {
+      console.log('patient list:', response);
+      $scope.patientList = response.data;
+    });
+  }
 
   function doctorList()
   {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
-      console.log('doctor list:', response)
+      console.log('doctor list:', response);
       $scope.doctorList = response.data;
-    })
-  };
+    });
+  }
 
   $scope.currentUser = AuthService.getUserStatus();
 
@@ -150,28 +147,24 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
     var doctorToAdd = $scope.doctor;
     console.log(doctorToAdd);
 
-  }
+  };
 
   $scope.logout = function() {
     //TODO: create proper logout service
     AuthService.logout();
     $location.path('');
-  }
+  };
 
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
   $scope.goTo = function(locationId) {
     // $location.hash(locationId);
     anchorSmoothScroll.scrollTo(locationId);
   };
-<<<<<<< HEAD
-=======
 
   doctorList();
 
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
 }]);
 
-app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
+app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($location, $q, $timeout, $http) {
 
     // create user variable
     var userIsLoggedIn = null;
@@ -190,12 +183,12 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
 
     function userInfo() {
       console.log('userInfo hit');
-      return user;
+      return User;
     }
 
 
     function isLoggedIn() {
-      if(userIsLoggedIn != null) {
+      if(userIsLoggedIn !== null) {
         return true;
       } else {
         return false;
@@ -220,12 +213,12 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
             userIsLoggedIn = true;
             console.log('data', data.id);
             User = data;
-            console.log('user in service', user)
+            console.log('user in service', user);
             deferred.resolve();
 
           } else {
             console.log(data);
-            console.log('error in success')
+            console.log('error in success');
             userIsLoggedIn = false;
             user = null;
             deferred.reject();
@@ -240,14 +233,14 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
         });
       // return promise object
       return deferred.promise;
-    };
+    }
 
 
 
 
     function logout() {
       User = {};
-      isLoggedIn = false;
+      userIsLoggedIn = false;
       console.log(User);
 
     // create a new instance of deferred
@@ -269,7 +262,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
     // return promise object
       return deferred.promise;
 
-    };
+    }
 
     function register(user) {
     // create a new instance of deferred
@@ -280,7 +273,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
         .success(function (data, status) {
           if(status === 200){
             alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-            $location.path();
+            $location.path('');
             deferred.resolve();
           } else {
             alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
@@ -293,7 +286,7 @@ app.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $
         });
       // return promise object
       return deferred.promise;
-    };
+    }
 }]);
 
 app.service('anchorSmoothScroll', function(){
@@ -304,11 +297,7 @@ app.service('anchorSmoothScroll', function(){
         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 
         var startY = currentYPosition();
-<<<<<<< HEAD
-        var stopY = elmYPosition(locationId) - 21;
-=======
         var stopY = elmYPosition(locationId);
->>>>>>> 68d7a3f6e5d24a9a8ca8094c1b809ee476317896
         var distance = stopY > startY ? stopY - startY : startY - stopY;
         if (distance < 100) {
             scrollTo(0, stopY); return;
