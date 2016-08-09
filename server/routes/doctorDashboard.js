@@ -75,7 +75,7 @@ router.get('/managePatientsList', function(req, res, next) {
   // res.send(200);
 });
 
-router.get('resourcesList/:id', function(req, res, next) {
+router.get('/resourcesList/:id', function(req, res, next) {
 
   console.log('resources list hit');
   var id = req.params.id;
@@ -99,10 +99,9 @@ router.get('resourcesList/:id', function(req, res, next) {
       console.log(err);
     }
   });
-
 });
 
-router.get('encouragementList/:id', function(req, res, next) {
+router.get('/encouragementList/:id', function(req, res, next) {
 
   console.log('encouragement list hit');
   var id = req.params.id;
