@@ -25,7 +25,10 @@
     <nav class="top-nav">
       <div class="container">
         <div class="nav-wrapper">
-          <a class="page-title">Welcome, {{user.firstName}} {{user.lastName}}!</a>
+          <a class="left page-title">Welcome, {{currentUser.firstname}} {{currentUser.lastname}}!</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a ng-click="logout()" class="waves-effect waves-dark">Logout</a></li>
+          </ul>
         </div>
       </div>
     </nav>
@@ -35,7 +38,7 @@
       <li class="bold" ng-click="goTo('managePatients')" ><a class="waves-effect waves-dark">Manage Patients</a></li>
       <li class="bold" ng-click="goTo('manageResources')" ><a class="waves-effect waves-dark">Manage Resources</a></li>
       <li class="bold" ng-click="goTo('encouragementCentral')" ><a class="waves-effect waves-dark">Encouragement Central</a></li>
-      <li class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
+      <li ng-if="admin" class="bold" ng-click="goTo('manageDoctors')" ><a class="waves-effect waves-dark">Manage Doctors (admin only)</a></li>
     </ul>
   </header>
 
@@ -62,8 +65,79 @@
 
           </div>
 
-          <div id="manageDoctors" class="section scrollspy">
+          <div ng-if="admin" id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
+
+            <ul class="collapsible popout" data-collapsible="accordion">
+              <li ng-repeat="doctor in doctorList">
+                <div class="collapsible-header">
+                  {{doctor.firstname}} {{doctor.lastname}}
+                </div>
+                <div class="collapsible-body">
+                  <p>Patient List</p>
+                </div>
+              </li>
+            </ul>
+
+            <button ng-click="createDoctor = true" class="btn waves-effect waves-light">Add New Doctor</button>
+
+            <div ng-show="createDoctor == true" class="create-doctor">
+              <form novalidate role="form" name="create-doctor">
+                <div class="row">
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">face</i>
+                    <input  ng-model="doctor.firstName" id="firstName" type="text" class="validate" />
+                    <label for="firstName">First Name</label>
+                  </div>
+                  <div class="input-field col s6">
+                    <i class="material-icons prefix">face</i>
+                    <input  ng-model="doctor.lastName" id="lastName" type="text" class="validate" />
+                    <label for="lastName">Last Name</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                    <i class="material-icons prefix">mail_outline</i>
+                    <input  ng-model="doctor.email" id="email" type="email" class="validate" />
+                    <label for="email">Email</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                    <i class="material-icons prefix">phone</i>
+                    <input  ng-model="doctor.phone" id="phone" type="tel" class="validate" />
+                    <label for="phone">Phone Number</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                    <i class="material-icons prefix">account_box</i>
+                    <input  ng-model="doctor.username" id="username" type="text" class="validate" />
+                    <label for="username">Username</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">vpn_key</i>
+                    <input ng-model="doctor.password" id="password" type="password" class="validate">
+                    <label for="password">Password</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s6">
+                    <button ng-click="createDoctor()" class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                  </div>
+                  <div class="input-field col s6">
+                    <button ng-click="createDoctor = false" class="btn waves-effect waves-light">Cancel</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
 
           </div>
 
@@ -71,6 +145,7 @@
       </div>
     </div>
   </main>
+
 
 
   <!-- <div ng-if="userLoggedIn.loggedIn" ng-include src="'views/header.html'"></div>
@@ -82,3 +157,12 @@
 
 </body>
 </html> -->
+
+
+<script>
+  $(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+</script>
