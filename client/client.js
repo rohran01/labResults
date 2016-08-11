@@ -35,19 +35,19 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
 
   $scope.login = function() {
 
-    // user = $scope.user;                                        //TODO: Uncomment -- only commented out for remote testing
-    // AuthService.login(user).then(function() {
-    //   var serviceUser = AuthService.getUserStatus();
-    //   console.log('logged in?', AuthService.isLoggedIn());
-    //   console.log('patient flag?', serviceUser.patientflag);
-    //   if (serviceUser.patientflag && AuthService.isLoggedIn) {
-    //     $location.path('patientDashboard');
-    //   } else if (serviceUser.doctorflag && AuthService.isLoggedIn) {
+    user = $scope.user;                                        //TODO: Uncomment -- only commented out for remote testing
+    AuthService.login(user).then(function() {
+      var serviceUser = AuthService.getUserStatus();
+      console.log('logged in?', AuthService.isLoggedIn());
+      console.log('patient flag?', serviceUser.patientflag);
+      if (serviceUser.patientflag && AuthService.isLoggedIn) {
+        $location.path('patientDashboard');
+      } else if (serviceUser.doctorflag && AuthService.isLoggedIn) {
         $location.path('doctorDashboard');
-      // }
-    // }).then(function() {
-    //   console.log('user info', AuthService.getUserStatus());
-    // });
+      }
+    }).then(function() {
+      console.log('user info', AuthService.getUserStatus());
+    });
   };
 
 
@@ -147,61 +147,64 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
     myDoctor();
   }
 
-  // initializePage();
+  initializePage();
 
 }]);
 
 app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
-  // $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
+  $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
   $scope.createDoctor = false;
   $scope.myPatientList = [];
   $scope.managePatientsList = [];
   $scope.resourcesList = [];
   $scope.encouragementList = [];
   $scope.doctorList = [];
-  $scope.doctorList = [{firstname: 'Martha', lastname: 'Johnson'}, {firstname: 'Loretta', lastname: 'Bergeron'}, {firstname: 'Jane', lastname: 'Horowitz'}];
+  // $scope.doctorList = [{firstname: 'Martha', lastname: 'Johnson'}, {firstname: 'Loretta', lastname: 'Bergeron'}, {firstname: 'Jane', lastname: 'Horowitz'}];
 
-  function myPatientList()
+  if ($scope.currentUser.adminflag)
   {
-    $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-      $scope.myPatientList = response.data;
-    });
+    $scope.admin = true;
   }
+  // $scope.admin = true;                  //TODO: switch this out -- only for remote development
+
+  // function myPatientList()
+  // {
+  //   $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+  //     console.log(response);
+  //     $scope.myPatientList = response.data;
+  //   });
+  // }
 
   function managePatientsList()
   {
     $http.get('/doctorDashboard/managePatientsList').then(function(response) {
+      console.log('managePatientsList:', response.data);
       $scope.managePatientsList = response.data;
     });
   }
 
-  function resourcesList()
-  {
-    $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-      $scope.resourcesList = response.data;
-    });
-  }
-
-  function encouragementList()
-  {
-    $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-      $scope.encouragementList = response.data;
-    });
-  }
+  // function resourcesList()
+  // {
+  //   $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+  //     $scope.resourcesList = response.data;
+  //   });
+  // }
+  //
+  // function encouragementList()
+  // {
+  //   $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+  //     $scope.encouragementList = response.data;
+  //   });
+  // }
 
   function doctorList()
   {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
+      console.log('doctors', response.data);
       $scope.doctorList = response.data;
     });
   }
-
-  // if ($scope.currentUser.adminflag)
-  // {
-  //   $scope.admin = true;
-  // }
-  $scope.admin = true;                  //TODO: switch this out -- only for remote development
 
   $scope.createDoctor = function() {
     var doctorToAdd = $scope.doctor;
@@ -219,45 +222,45 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   };
 
   function initializePage() {
-    myPatientList();
+    // myPatientList();
     managePatientsList();
-    resourcesList();
-    encouragementList();
+    // resourcesList();
+    // encouragementList();
     doctorList();
   }
 
-  // initializePage();     //TODO: uncomment -- commented out for remote testing
+  initializePage();     //TODO: uncomment -- commented out for remote testing
 
 }]);
 
-app.directive('datepicker', function() {
-  return {
-    restrict: 'A',
-    scope: {
-      'model': '='
-    },
-    link: function(scope, elem, attrs) {
-      $(elem).pickadate({
-        selectMonths: true,
-        selectYears: 100
-      });
-    }
-  };
-});
-
-app.directive('collapse', function() {
-  return {
-    restrict: 'A',
-    scope: {
-      'model': '='
-    },
-    link: function(scope, elem, attrs) {
-      $(elem).collapsible({
-        accordion : false
-      });
-    }
-  };
-});
+// app.directive('datepicker', function() {
+//   return {
+//     restrict: 'A',
+//     scope: {
+//       'model': '='
+//     },
+//     link: function(scope, elem, attrs) {
+//       $(elem).pickadate({
+//         selectMonths: true,
+//         selectYears: 100
+//       });
+//     }
+//   };
+// });
+//
+// app.directive('collapse', function() {
+//   return {
+//     restrict: 'A',
+//     scope: {
+//       'model': '='
+//     },
+//     link: function(scope, elem, attrs) {
+//       $(elem).collapsible({
+//         accordion : false
+//       });
+//     }
+//   };
+// });
 
 app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($location, $q, $timeout, $http) {
 
@@ -291,7 +294,7 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
     }
 
     function getUserStatus() {
-      console.log(User);
+      console.log('user object:', User);
       return User;
     }
 

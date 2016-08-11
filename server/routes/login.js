@@ -15,8 +15,6 @@ var encryptLib = require('../modules/encryption');
 var connection = require('../modules/connection');
 var pg = require('pg');
 
-// console.log('login route hit');
-
 router.post('/', function(req, res, next) {
 
   var loginUser = {
@@ -39,7 +37,6 @@ router.post('/', function(req, res, next) {
           var passwordVerified = encryptLib.comparePassword(loginUser.password, storedUser.password);
 
           if (passwordVerified) {
-            console.log('user verified', storedUser);
             storedUser.password = null;
             res.status(200).json(storedUser);
           } else {
@@ -59,15 +56,12 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
 //TODO SQL query
-  console.log('called deserializeUser');
   pg.connect(connection, function (err, client) {
 
     var user = {};
-    console.log('called deserializeUser - pg');
       var query = client.query("SELECT * FROM users WHERE id = $1", [id]);
 
       query.on('row', function (row) {
-        console.log('User row', row);
         user = row;
         done(null, user);
       });
@@ -90,12 +84,10 @@ passport.use('local', new localStrategy({
     usernameField: 'username'
     }, function(req, username, password, done){
 	    pg.connect(connection, function (err, client) {
-	    	console.log('called local - pg');
 	    	var user = {};
         var query = client.query("SELECT * FROM users WHERE username = $1", [username]);
 
         query.on('row', function (row) {
-        	console.log('User obj', row);
         	user = row;
 
           // Hash and compare
@@ -107,7 +99,6 @@ passport.use('local', new localStrategy({
             console.log('nope');
             done(null, false, {message: 'Incorrect credentials.'});
           }
-
         });
 
         // After all data is returned, close connection and return results

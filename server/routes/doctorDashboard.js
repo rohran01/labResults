@@ -4,19 +4,23 @@ var pg = require('pg');
 
 var router = express.Router();
 
-router.get('myPatientList/:id', function(req, res, next) {
+router.get('/myPatientList', function(req, res, next) {
 
   console.log('doctor/patient list hit');
   var id = req.params.id;
+  console.log('id for myPatientList:', id)
   var patientIDs = [];
   var patientList = [];
 
   pg.connect(connection, function(err, client, done) {
 
-    var preQuery = client.query("SELECT patientID FROM doctorpatient WHERE doctorID = $1", [id]);
+    var preQuery = client.query("SELECT patientid FROM doctorpatient WHERE doctorid = $1", [id]);
+
     preQuery.on('row', function(row) {
       patientIDs.push(row);
     });
+
+    console.log('patientIDs');
 
     var query = client.query('SELECT * FROM userprofile WHERE userID IN $1', [patientIDs]);
 
@@ -49,20 +53,19 @@ router.get('/managePatientsList', function(req, res, next) {
 
   pg.connect(connection, function(err, client, done) {
 
-    var query = client.query('SELECT * FROM userprofile WHERE activeflag = $1 AND patientflag = $1', ['1']);
+    var query = client.query('SELECT id, username, firstname, lastname, email, birthdate, gender, accensionnumber FROM userprofile WHERE activeflag = $1 AND patientflag = $1', ['1']);
 
     query.on('row', function(row) {
       managePatientsList.push(row);
     });
 
-    for (var patient in managePatientsList)
-    {
-      this.password = null;
-    }
+    // for (var patient in managePatientsList)
+    // {
+    //   patient.password = null;
+    // }
 
     // After all data is returned, close connection and return results
     query.on('end', function() {
-
       client.end();
       return res.json(managePatientsList);
     });
@@ -72,7 +75,6 @@ router.get('/managePatientsList', function(req, res, next) {
       console.log(err);
     }
   });
-  // res.send(200);
 });
 
 router.get('/resourcesList/:id', function(req, res, next) {
@@ -125,8 +127,6 @@ router.get('/encouragementList/:id', function(req, res, next) {
       console.log(err);
     }
   });
-
-  });
 });
 
 router.get('/doctorList', function(req, res, next) {
@@ -136,16 +136,16 @@ router.get('/doctorList', function(req, res, next) {
 
   pg.connect(connection, function(err, client, done) {
 
-    var query = client.query('SELECT * FROM userprofile WHERE activeflag = $1 AND doctorflag = $1', ['1']);
+    var query = client.query('SELECT id, username, firstname, lastname, email, phone FROM userprofile WHERE activeflag = $1 AND doctorflag = $1', ['1']);
 
     query.on('row', function(row) {
       doctorList.push(row);
     });
 
-    for (var doctor in doctorList)
-    {
-      this.password = null;
-    }
+    // for (var doctor in doctorList)
+    // {
+    //   this.password = null;
+    // }
 
     // After all data is returned, close connection and return results
     query.on('end', function() {
@@ -159,7 +159,6 @@ router.get('/doctorList', function(req, res, next) {
       console.log(err);
     }
   });
-  // res.send(200);
 });
 
 

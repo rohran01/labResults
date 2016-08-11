@@ -4,7 +4,6 @@
     <nav class="top-nav">
       <div class="container">
         <div class="nav-wrapper">
-          <a class="page-title">Welcome, {{user.firstName}} {{user.lastName}}!</a>
           <a class="left page-title">Welcome, {{currentUser.firstname}} {{currentUser.lastname}}!</a>
           <ul class="right hide-on-med-and-down">
             <li><a ng-click="logout()" class="waves-effect waves-dark">Logout</a></li>
@@ -29,7 +28,7 @@
           <div id="myPatients" class="section scrollspy">
             <h4>My Patients</h4>
 
-            <ul collapse class="collapsible popout" data-collapsible="accordion">
+            <ul class="collapsible popout" data-collapsible="expandable">
               <li ng-repeat="patient in myPatientList">
                 <div class="collapsible-header">
                   {{patient.firstname}} {{patient.lastname}}
@@ -44,6 +43,21 @@
           <div ng-if="admin" id="managePatients" class="section scrollspy">
             <h4>Manage Patients</h4>
 
+            <ul collapsible class="collapsible popout" data-collapsible="expandable" watch>
+              <li ng-repeat="patient in managePatientsList">
+                <div class="collapsible-header">
+                  {{patient.firstname}} {{patient.lastname}}
+                </div>
+                <div class="collapsible-body">
+                  <p class="col s6"><b>Name: </b>{{patient.firstname}} {{patient.lastname}}</p>
+                  <p class="col s6"><b>Birthdate: </b>{{patient.birthdate}}</p>
+                  <p class="col s6"><b>Sex: </b>{{patient.gender}}</p>
+                  <p class="col s6"><b>Accension #: </b>{{patient.accensionnumber}}</p>
+                  <p class="col s6"><b>Phone: </b>{{patient.phone}}</p>
+                  <p class="col s6"><b>Email: </b>{{patient.email}}</p>
+                </div>
+              </li>
+            </ul>
           </div>
 
           <div id="manageResources" class="section scrollspy">
@@ -58,13 +72,15 @@
           <div ng-if="admin" id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
 
-            <ul collapse class="collapsible popout" data-collapsible="expandable">
+            <ul class="collapsible popout" data-collapsible="accordion" watch>
               <li ng-repeat="doctor in doctorList">
                 <div class="collapsible-header">
                   {{doctor.firstname}} {{doctor.lastname}}
                 </div>
                 <div class="collapsible-body">
-                  <p>Patient List</p>
+                  <p><b>Username:</b> {{doctor.username}}</p>
+                  <p><b>Email:</b> {{doctor.email}}</p>
+                  <p><b>Phone:</b> {{doctor.phone}}</p>
                 </div>
               </li>
             </ul>
