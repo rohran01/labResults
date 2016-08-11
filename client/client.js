@@ -38,21 +38,16 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
     user = $scope.user;                                        //TODO: Uncomment -- only commented out for remote testing
     AuthService.login(user).then(function() {
       var serviceUser = AuthService.getUserStatus();
-      console.log('logged in?', AuthService.isLoggedIn());
-      console.log('patient flag?', serviceUser.patientflag);
       if (serviceUser.patientflag && AuthService.isLoggedIn) {
         $location.path('patientDashboard');
       } else if (serviceUser.doctorflag && AuthService.isLoggedIn) {
         $location.path('doctorDashboard');
       }
-    }).then(function() {
-      console.log('user info', AuthService.getUserStatus());
     });
   };
 
 
   $scope.registrationRedirect = function(){
-    console.log('clicked!');
     $location.path('register');
   };
 
@@ -67,8 +62,6 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
   $scope.register = function() {
 
     user = $scope.user;
-
-    console.log(user);
 
     $http.post('/register', this.user).then(function(response) {
       if(response.data) {
@@ -100,7 +93,6 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
   $scope.libraryList = [];
   $scope.myDoctor = {};
   $scope.currentUser = AuthService.getUserStatus();
-  console.log('dashboard user', $scope.currentUser);
   // console.log($scope.currentUser);
 
   function myFoodsList()
@@ -179,7 +171,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   function managePatientsList()
   {
     $http.get('/doctorDashboard/managePatientsList').then(function(response) {
-      console.log('managePatientsList:', response.data);
       $scope.managePatientsList = response.data;
     });
   }
@@ -201,14 +192,12 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   function doctorList()
   {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
-      console.log('doctors', response.data);
       $scope.doctorList = response.data;
     });
   }
 
   $scope.createDoctor = function() {
     var doctorToAdd = $scope.doctor;
-    console.log(doctorToAdd);
   };
 
   $scope.logout = function() {
@@ -280,7 +269,6 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
     });
 
     function userInfo() {
-      console.log('userInfo hit');
       return User;
     }
 
@@ -294,12 +282,10 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
     }
 
     function getUserStatus() {
-      console.log('user object:', User);
       return User;
     }
 
     function login(user) {
-      console.log('login service hit');
     // create a new instance of deferred
       var deferred = $q.defer();
       // send a post request to the server
@@ -309,13 +295,10 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
           if(status === 200){
             console.log('success');
             userIsLoggedIn = true;
-            console.log('data', data.id);
             User = data;
-            console.log('user in service', user);
             deferred.resolve();
 
           } else {
-            console.log(data);
             console.log('error in success');
             userIsLoggedIn = false;
             user = null;
@@ -339,7 +322,6 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
     function logout() {
       User = {};
       userIsLoggedIn = false;
-      console.log(User);
 
     // create a new instance of deferred
       var deferred = $q.defer();

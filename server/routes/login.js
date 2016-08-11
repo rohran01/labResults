@@ -22,6 +22,9 @@ router.post('/', function(req, res, next) {
     password: req.body.password
   }
 
+  console.log(loginUser);
+  console.log(connection);
+
   pg.connect(connection, function(err, client, done) {
 
     client.query('SELECT * FROM userprofile WHERE username = $1',
