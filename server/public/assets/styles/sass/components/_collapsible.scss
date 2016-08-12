@@ -26,14 +26,26 @@
   }
 }
 
+p {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
 .collapsible-body {
   display: none;
   border-bottom: 1px solid $collapsible-border-color;
   box-sizing: border-box;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 
   p {
     margin: 0;
     padding: 2rem;
+  }
+
+  i {
+    cursor: pointer;
   }
 }
 

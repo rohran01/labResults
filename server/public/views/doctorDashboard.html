@@ -25,28 +25,13 @@
     <div class="container">
       <div class="row">
         <div class="col s12 m9 l10">
+
           <div id="myPatients" class="section scrollspy">
             <h4>My Patients</h4>
-
-            <ul collapsible class="collapsible popout" data-collapsible="accordion" watch>
+            <ul collapse class="collapsible popout" data-collapsible="accordion" watch>
               <li ng-repeat="patient in myPatientList">
                 <div class="collapsible-header">
-                  {{patient.firstname}} {{patient.lastname}}
-                </div>
-                <div class="collapsible-body">
-                  <p>Patient List</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div ng-if="admin" id="managePatients" class="section scrollspy">
-            <h4>Manage Patients</h4>
-
-            <ul class="collapsible popout" data-collapsible="accordion" watch>
-              <li ng-repeat="patient in managePatientsList">
-                <div class="collapsible-header">
-                  {{patient.firstname}} {{patient.lastname}}
+                  <p>{{patient.firstname}} {{patient.lastname}}</p>
                 </div>
                 <div class="collapsible-body">
                   <p class="col s6"><b>Name: </b>{{patient.firstname}} {{patient.lastname}}</p>
@@ -55,6 +40,35 @@
                   <p class="col s6"><b>Accension #: </b>{{patient.accensionnumber}}</p>
                   <p class="col s6"><b>Phone: </b>{{patient.phone}}</p>
                   <p class="col s6"><b>Email: </b>{{patient.email}}</p>
+                  <div class="col s12">
+                    <i ng-click="edit('myPatients', patient.id)" class="right material-icons">mode_edit</i>
+                    <i ng-click="delete('myPatients', patient.id)" class="right material-icons">delete</i>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div ng-if="admin" id="managePatients" class="section scrollspy">
+            <h4>Manage Patients</h4>
+            <ul collapse class="collapsible popout" data-collapsible="accordion" watch>
+              <li ng-repeat="patient in managePatientsList">
+                <div class="collapsible-header">
+                  <p>{{patient.firstname}} {{patient.lastname}}</p>
+                </div>
+                <div class="collapsible-body">
+                    <p class="col s6"><b>Name: </b>{{patient.firstname}} {{patient.lastname}}</p>
+                    <p class="col s6"><b>Birthdate: </b>{{patient.birthdate}}</p>
+                    <p class="col s6"><b>Sex: </b>{{patient.gender}}</p>
+                    <p class="col s6"><b>Accension #: </b>{{patient.accensionnumber}}</p>
+                    <p class="col s6"><b>Phone: </b>{{patient.phone}}</p>
+                    <p class="col s6"><b>Email: </b>{{patient.email}}</p>
+                    <div class="col s12">
+                      <i ng-click="edit('managePatients', patient.id)" class="right material-icons">mode_edit</i>
+                      <i ng-click="delete('managePatients', patient.id)" class="right material-icons">delete</i>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
               </li>
             </ul>
@@ -62,25 +76,57 @@
 
           <div id="manageResources" class="section scrollspy">
             <h4>Manage Resources</h4>
-
+            <ul collapse class="collapsible popout" data-collapsible="accordion" watch>
+              <li ng-repeat="resource in resourcesList">
+                <div class="collapsible-header">
+                  <p>{{resource.title}}</p>
+                </div>
+                <div class="collapsible-body">
+                    <p>{{resource.link}}</p>
+                    <div class="col s12">
+                      <i ng-click="edit('manageResources', resource.id)" class="right material-icons">mode_edit</i>
+                      <i ng-click="delete('manageResources', resource.id)" class="right material-icons">delete</i>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </li>
+              </ul>
           </div>
 
           <div id="encouragementCentral" class="section scrollspy">
             <h4>Encouragement Central</h4>
-
+            <ul collapse class="collapsible popout" data-collapsible="accordion" watch>
+              <li ng-repeat="encouragement in encouragementList">
+                <div class="collapsible-header">
+                  <p>{{encouragement.name}}</p>
+                </div>
+                <div class="collapsible-body">
+                    <p>{{encouragement.message}}</p>
+                    <div class="col s12">
+                      <i ng-click="edit('encouragementCentral', encouragement.id)" class="right material-icons">mode_edit</i>
+                      <i ng-click="delete('encouragementCentral', encouragement.id)" class="right material-icons">delete</i>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </li>
+              </ul>
           </div>
           <div ng-if="admin" id="manageDoctors" class="section scrollspy">
             <h4>Manage Doctors</h4>
-
-            <ul class="collapsible popout" data-collapsible="accordion" watch>
+            <ul collapse class="collapsible popout" data-collapsible="accordion" watch>
               <li ng-repeat="doctor in doctorList">
                 <div class="collapsible-header">
-                  {{doctor.firstname}} {{doctor.lastname}}
+                  <p>{{doctor.firstname}} {{doctor.lastname}}</p>
                 </div>
                 <div class="collapsible-body">
-                  <p><b>Username:</b> {{doctor.username}}</p>
-                  <p><b>Email:</b> {{doctor.email}}</p>
-                  <p><b>Phone:</b> {{doctor.phone}}</p>
+                  <p class="col s4"><b>Username:</b> {{doctor.username}}</p>
+                  <p class="col s4"><b>Email:</b> {{doctor.email}}</p>
+                  <p class="col s4"><b>Phone:</b> {{doctor.phone}}</p>
+                  <div class="col s12">
+                    <i ng-click="edit('manageDoctors', doctor.id)" class="right material-icons">mode_edit</i>
+                    <i ng-click="delete('manageDoctors', doctor.id)" class="right material-icons">delete</i>
+                  </div>
+                  <div class="clearfix"></div>
                 </div>
               </li>
             </ul>

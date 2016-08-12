@@ -97,7 +97,7 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 
   function myFoodsList()
   {
-    $http.get('/patientDashboard/myFoodsList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+    $http.get('/patientDashboard/myFoodsList/', {params: {id: $scope.currentUser}}).then(function(response) {
       $scope.myFoodsList = response.data;
     });
   }
@@ -152,21 +152,19 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   $scope.resourcesList = [];
   $scope.encouragementList = [];
   $scope.doctorList = [];
-  // $scope.doctorList = [{firstname: 'Martha', lastname: 'Johnson'}, {firstname: 'Loretta', lastname: 'Bergeron'}, {firstname: 'Jane', lastname: 'Horowitz'}];
 
   if ($scope.currentUser.adminflag)
   {
     $scope.admin = true;
   }
-  // $scope.admin = true;                  //TODO: switch this out -- only for remote development
 
-  // function myPatientList()
-  // {
-  //   $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-  //     console.log(response);
-  //     $scope.myPatientList = response.data;
-  //   });
-  // }
+  function myPatientList()
+  {
+    console.log('my patient list id:', $scope.currentUser);
+    $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
+      $scope.myPatientList = response.data;
+    });
+  }
 
   function managePatientsList()
   {
@@ -175,24 +173,25 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
     });
   }
 
-  // function resourcesList()
-  // {
-  //   $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-  //     $scope.resourcesList = response.data;
-  //   });
-  // }
-  //
-  // function encouragementList()
-  // {
-  //   $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-  //     $scope.encouragementList = response.data;
-  //   });
-  // }
+  function resourcesList()
+  {
+    $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
+      $scope.resourcesList = response.data;
+    });
+  }
+
+  function encouragementList()
+  {
+    $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
+      $scope.encouragementList = response.data;
+    });
+  }
 
   function doctorList()
   {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
       $scope.doctorList = response.data;
+      console.log('doctor list:', $scope.doctorList);
     });
   }
 
@@ -210,11 +209,21 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
     anchorSmoothScroll.scrollTo(locationId);
   };
 
+  $scope.delete = function(type, id)
+  {
+    console.log('delete:', type, id);
+  }
+
+  $scope.edit = function(type, id)
+  {
+    console.log('edit:', type, id);
+  }
+
   function initializePage() {
-    // myPatientList();
+    myPatientList();
     managePatientsList();
-    // resourcesList();
-    // encouragementList();
+    resourcesList();
+    encouragementList();
     doctorList();
   }
 
@@ -222,34 +231,34 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
 
 }]);
 
-// app.directive('datepicker', function() {
-//   return {
-//     restrict: 'A',
-//     scope: {
-//       'model': '='
-//     },
-//     link: function(scope, elem, attrs) {
-//       $(elem).pickadate({
-//         selectMonths: true,
-//         selectYears: 100
-//       });
-//     }
-//   };
-// });
-//
-// app.directive('collapse', function() {
-//   return {
-//     restrict: 'A',
-//     scope: {
-//       'model': '='
-//     },
-//     link: function(scope, elem, attrs) {
-//       $(elem).collapsible({
-//         accordion : false
-//       });
-//     }
-//   };
-// });
+app.directive('datepicker', function() {
+  return {
+    restrict: 'A',
+    scope: {
+      'model': '='
+    },
+    link: function(scope, elem, attrs) {
+      $(elem).pickadate({
+        selectMonths: true,
+        selectYears: 100
+      });
+    }
+  };
+});
+
+app.directive('collapse', function() {
+  return {
+    restrict: 'A',
+    scope: {
+      'model': '='
+    },
+    link: function(scope, elem, attrs) {
+      $(elem).collapsible({
+        accordion : true
+      });
+    }
+  };
+});
 
 app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($location, $q, $timeout, $http) {
 

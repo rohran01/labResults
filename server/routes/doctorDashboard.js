@@ -6,23 +6,12 @@ var router = express.Router();
 
 router.get('/myPatientList', function(req, res, next) {
 
-  console.log('doctor/patient list hit');
-  var id = req.params.id;
-  console.log('id for myPatientList:', id)
-  var patientIDs = [];
+  var id = req.query.id;
   var patientList = [];
 
   pg.connect(connection, function(err, client, done) {
 
-    var preQuery = client.query("SELECT patientid FROM doctorpatient WHERE doctorid = $1", [id]);
-
-    preQuery.on('row', function(row) {
-      patientIDs.push(row);
-    });
-
-    console.log('patientIDs');
-
-    var query = client.query('SELECT * FROM userprofile WHERE userID IN $1', [patientIDs]);
+    var query = client.query('SELECT * FROM userprofile WHERE id IN (SELECT patientid FROM doctorpatient WHERE doctorid = $1)', [id]);
 
     query.on('row', function(row) {
       patientList.push(row);
@@ -77,15 +66,15 @@ router.get('/managePatientsList', function(req, res, next) {
   });
 });
 
-router.get('/resourcesList/:id', function(req, res, next) {
+router.get('/resourcesList', function(req, res, next) {
 
   console.log('resources list hit');
-  var id = req.params.id;
+  var id = req.query.id;
   var resourcesList = [];
 
   pg.connect(connection, function(err, client, done) {
 
-    var query = client.query('SELECT * FROM resources WHERE userID = $1', [id]);
+    var query = client.query('SELECT * FROM resource WHERE userID = $1', [id]);
 
     query.on('row', function(row) {
       resourcesList.push(row);
@@ -103,10 +92,10 @@ router.get('/resourcesList/:id', function(req, res, next) {
   });
 });
 
-router.get('/encouragementList/:id', function(req, res, next) {
+router.get('/encouragementList', function(req, res, next) {
 
   console.log('encouragement list hit');
-  var id = req.params.id;
+  var id = req.query.id;
   var encouragementList = [];
 
   pg.connect(connection, function(err, client, done) {
