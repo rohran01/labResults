@@ -35,6 +35,7 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
 
   $scope.login = function() {
 
+
     user = $scope.user;                                        //TODO: Uncomment -- only commented out for remote testing
     AuthService.login(user).then(function() {
       var serviceUser = AuthService.getUserStatus();
@@ -62,6 +63,7 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
   $scope.register = function() {
 
     user = $scope.user;
+    user.patientflag = 1;
 
     $http.post('/register', this.user).then(function(response) {
       if(response.data) {
@@ -196,8 +198,30 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   }
 
   $scope.createDoctor = function() {
+
     var doctorToAdd = $scope.newDoctor;
+    doctorToAdd.doctorflag = 1;
+    if (doctorToAdd.adminflag == 'true')
+    {
+      doctorToAdd.adminflag = 1;
+    } else {
+      doctorToAdd.adminflag = 0;
+    }
+
     console.log(doctorToAdd);
+
+    $http.post('/register', doctorToAdd).then(function(response) {
+      if(response.data) {
+        if (response.data.name === 'error') {
+            console.log(response);
+            alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
+          } else {
+            alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
+          }
+      } else {
+        console.log('error');
+      }
+    });
   };
 
   $scope.logout = function() {
@@ -311,6 +335,9 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
     }
 
     function login(user) {
+
+      isLoggedIn = false;
+      User = {};
     // create a new instance of deferred
       var deferred = $q.defer();
       // send a post request to the server

@@ -48,11 +48,6 @@ router.get('/managePatientsList', function(req, res, next) {
       managePatientsList.push(row);
     });
 
-    // for (var patient in managePatientsList)
-    // {
-    //   patient.password = null;
-    // }
-
     // After all data is returned, close connection and return results
     query.on('end', function() {
       client.end();

@@ -28,13 +28,16 @@ router.post('/', function(req, res, next) {
     email: req.body.email,
     gender: req.body.gender,
     birthdate: req.body.birthdate,
-    patientflag: 1
+    patientflag: req.body.patientflag,
+    doctorflag: req.body.doctorflag,
+    adminflag: req.body.adminflag,
+    activeflag: 1
   };
 
   pg.connect(connection, function(err, client, done) {
 
-    client.query('INSERT INTO userprofile (username, password, firstName, lastName, phone, email, gender, birthdate, patientflag)     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
-      [saveUser.username, saveUser.password, saveUser.firstName, saveUser.lastName, saveUser.phone, saveUser.email, saveUser.gender, saveUser.birthdate, saveUser.patientflag],
+    client.query('INSERT INTO userprofile (username, password, firstName, lastName, phone, email, gender, birthdate, patientflag, doctorflag, adminflag, activeflag) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id',
+      [saveUser.username, saveUser.password, saveUser.firstName, saveUser.lastName, saveUser.phone, saveUser.email, saveUser.gender, saveUser.birthdate, saveUser.patientflag, saveUser.doctorflag, saveUser.adminflag, saveUser.activeflag],
       function (err, result) {
         client.end();
 
