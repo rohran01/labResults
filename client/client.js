@@ -146,7 +146,7 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
   $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
-  $scope.createDoctor = false;
+  $scope.newDoctor = {};
   $scope.myPatientList = [];
   $scope.managePatientsList = [];
   $scope.resourcesList = [];
@@ -196,7 +196,8 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   }
 
   $scope.createDoctor = function() {
-    var doctorToAdd = $scope.doctor;
+    var doctorToAdd = $scope.newDoctor;
+    console.log(doctorToAdd);
   };
 
   $scope.logout = function() {
@@ -246,7 +247,22 @@ app.directive('datepicker', function() {
   };
 });
 
+app.directive('modalTrigger', function() {
+  console.log('modal hit');
+  return {
+    restrict: 'A',
+    scope: {
+      'model': '='
+    },
+    link: function(scope, elem, attrs) {
+      $(elem).leanModal();
+
+    }
+  };
+});
+
 app.directive('collapse', function() {
+  console.log('collapse hit');
   return {
     restrict: 'A',
     scope: {
