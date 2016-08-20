@@ -1,0 +1,93 @@
+{
+  "_args": [
+    [
+      "angular-promise-tracker",
+      "/Users/anthony/Desktop/newProjects/labResults"
+    ]
+  ],
+  "_from": "angular-promise-tracker@latest",
+  "_id": "angular-promise-tracker@2.2.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/angular-promise-tracker",
+  "_nodeVersion": "0.12.10",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/angular-promise-tracker-2.2.2.tgz_1465318764214_0.8483079124707729"
+  },
+  "_npmUser": {
+    "email": "andrewtjoslin@gmail.com",
+    "name": "andytjoslin"
+  },
+  "_npmVersion": "2.14.9",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "angular-promise-tracker",
+    "raw": "angular-promise-tracker",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-promise-tracker/-/angular-promise-tracker-2.2.2.tgz",
+  "_shasum": "f4dd7e133fe6291d668178b5d884830da23d8914",
+  "_shrinkwrap": null,
+  "_spec": "angular-promise-tracker",
+  "_where": "/Users/anthony/Desktop/newProjects/labResults",
+  "author": {
+    "name": "Andy Joslin"
+  },
+  "bugs": {
+    "url": "https://github.com/ajoslin/angular-promise-tracker/issues"
+  },
+  "dependencies": {
+    "angular": ">=1.3.0"
+  },
+  "description": "angular-promise-tracker =======================",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-conventional-changelog": "~1.1.0",
+    "grunt-karma": "~0.6.2",
+    "karma": "~0.10.8",
+    "karma-chrome-launcher": "~0.1.2",
+    "karma-coffee-preprocessor": "~0.1.1",
+    "karma-firefox-launcher": "~0.1.2",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.5",
+    "karma-phantomjs-launcher": "~0.1.1",
+    "karma-requirejs": "~0.2.1",
+    "karma-script-launcher": "~0.1.0",
+    "load-grunt-tasks": "~0.2.1",
+    "requirejs": "~2.1.9",
+    "semver": "~2.2.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "f4dd7e133fe6291d668178b5d884830da23d8914",
+    "tarball": "https://registry.npmjs.org/angular-promise-tracker/-/angular-promise-tracker-2.2.2.tgz"
+  },
+  "gitHead": "99e0064952a987fdaa061951a6b4ddb3f8aaa006",
+  "homepage": "https://github.com/ajoslin/angular-promise-tracker",
+  "main": "promise-tracker.js",
+  "maintainers": [
+    {
+      "name": "andytjoslin",
+      "email": "andytjoslin@gmail.com"
+    }
+  ],
+  "name": "angular-promise-tracker",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "url": "git://github.com/ajoslin/angular-promise-tracker.git"
+  },
+  "scripts": {},
+  "version": "2.2.2"
+}

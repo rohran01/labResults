@@ -33,10 +33,16 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
 
   $scope.title = "Login Page";
 
-  $scope.login = function() {
+  $scope.login = function(form) {
 
+    $scope.submitted = true;
 
-    user = $scope.user;                                        //TODO: Uncomment -- only commented out for remote testing
+    if (form.$invalid) {
+      return;
+    }
+
+    user = $scope.user;
+
     AuthService.login(user).then(function() {
       var serviceUser = AuthService.getUserStatus();
       if (serviceUser.patientflag && AuthService.isLoggedIn) {
@@ -60,7 +66,13 @@ app.controller('registerController', ['$scope', '$http', '$location', function($
 
   $scope.title = "Registration Page";
 
-  $scope.register = function() {
+  $scope.register = function(form) {
+
+    $scope.submitted = true;
+
+    if (form.$invalid) {
+      return;
+    }
 
     user = $scope.user;
     user.patientflag = 1;
