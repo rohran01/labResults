@@ -1,4 +1,4 @@
-var app = angular.module('labResults', ['ngRoute']);
+var app = angular.module('labResults', ['ngRoute', 'ajoslin.promise-tracker']);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider
@@ -27,7 +27,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.html5Mode(true);
 }]);
 
-app.controller('loginController', ['$scope', '$http', '$location', 'AuthService', function($scope, $http, $location, AuthService) {
+app.controller('loginController', ['$scope', '$http', '$location', 'AuthService', 'promiseTracker', function($scope, $http, $location, AuthService, promiseTracker) {
 
   var user = {};
 
@@ -56,46 +56,6 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
 
   $scope.registrationRedirect = function(){
     $location.path('register');
-  };
-
-}]);
-
-app.controller('registerController', ['$scope', '$http', '$location', function($scope, $http, $location) {
-
-  var user = {};
-
-  $scope.title = "Registration Page";
-
-  $scope.register = function(form) {
-
-    $scope.submitted = true;
-
-    if (form.$invalid) {
-      return;
-    }
-
-    user = $scope.user;
-    user.patientflag = 1;
-
-    $http.post('/register', this.user).then(function(response) {
-      if(response.data) {
-        if (response.data.name === 'error') {
-            alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
-          } else {
-            alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-
-            $location.path('');
-
-          }
-      } else {
-        console.log('error');
-      }
-    });
-  };
-
-  $scope.loginRedirect = function(){
-
-    $location.path('');
   };
 
 }]);
@@ -157,7 +117,7 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 
 }]);
 
-app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
+app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$log', 'anchorSmoothScroll', 'AuthService', 'promiseTracker', function($scope, $http, $location, $log, anchorSmoothScroll, AuthService, promiseTracker) {
 
   $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
   $scope.newDoctor = {};
@@ -166,53 +126,56 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
   $scope.resourcesList = [];
   $scope.encouragementList = [];
   $scope.doctorList = [];
+  $scope.progress = promiseTracker();
 
-  if ($scope.currentUser.adminflag)
-  {
+  if ($scope.currentUser.adminflag) {
     $scope.admin = true;
   }
 
-  function myPatientList()
-  {
+  function myPatientList() {
     console.log('my patient list id:', $scope.currentUser);
     $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.myPatientList = response.data;
     });
   }
 
-  function managePatientsList()
-  {
+  function managePatientsList() {
     $http.get('/doctorDashboard/managePatientsList').then(function(response) {
       $scope.managePatientsList = response.data;
     });
   }
 
-  function resourcesList()
-  {
+  function resourcesList() {
     $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.resourcesList = response.data;
     });
   }
 
-  function encouragementList()
-  {
+  function encouragementList() {
     $http.get('/doctorDashboard/encouragementList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.encouragementList = response.data;
     });
   }
 
-  function doctorList()
-  {
+  function doctorList() {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
       $scope.doctorList = response.data;
       console.log('doctor list:', $scope.doctorList);
     });
   }
 
-  $scope.createDoctor = function() {
+  $scope.createDoctor = function(form) {
+
+    $scope.submitted = true;
+
+    if (form.$invalid) {
+      console.log('invalid form');
+      return;
+    }
 
     var doctorToAdd = $scope.newDoctor;
     doctorToAdd.doctorflag = 1;
+
     if (doctorToAdd.adminflag == 'true')
     {
       doctorToAdd.adminflag = 1;
@@ -222,18 +185,75 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', 'an
 
     console.log(doctorToAdd);
 
-    $http.post('/register', doctorToAdd).then(function(response) {
-      if(response.data) {
-        if (response.data.name === 'error') {
-            console.log(response);
-            alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
-          } else {
-            alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-          }
+    var $promise = $http.post('/register/addDoctor', doctorToAdd)
+    .success(function(data, status, headers, config) {
+      console.log('data', data);
+      console.log('status', status);
+      console.log('headers', headers);
+      console.log('config', config);
+
+      if (status == 200) {
+        $scope.newDoctor = null;
+        $scope.messages = config.data.firstName + ' ' + config.data.lastName + 'has been added!';
+        $scope.submitted = false;
+        doctorList();
       } else {
-        console.log('error');
+        $scope.messages = 'Oops, we received your request, but there was an error processing it.';
+        $log.error(data);
       }
+    })
+    .error(function(data, status, headers, config) {
+      $scope.progress = data;
+      $scope.messages = 'There was a network error. Try again later.';
+      $log.error(data);
+    })
+    .finally(function() {
+      // Hide status messages after three seconds.
+      $timeout(function() {
+        $scope.messages = null;
+      }, 3000);
     });
+
+    // .then(function(response) {
+    //   if(response.data) {
+    //     if (response.data.name === 'error') {
+    //         console.log(response);
+    //         alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
+    //       } else {
+    //         alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
+    //       }
+    //   } else {
+    //     console.log('error');
+    //   }
+    // });
+
+    // Perform JSONP request.
+    // var $promise = $http.jsonp('/register', doctorToAdd)
+    //   .success(function(data, status, headers, config) {
+    //     if (data.status == 'OK') {
+    //       $scope.newDoctor = null;
+    //       $scope.messages = 'Your form has been sent!';
+    //       $scope.submitted = false;
+    //     } else {
+    //       $scope.messages = 'Oops, we received your request, but there was an error processing it.';
+    //       $log.error(data);
+    //     }
+    //   })
+    //   .error(function(data, status, headers, config) {
+    //     $scope.progress = data;
+    //     $scope.messages = 'There was a network error. Try again later.';
+    //     $log.error(data);
+    //   })
+    //   .finally(function() {
+    //     // Hide status messages after three seconds.
+    //     $timeout(function() {
+    //       $scope.messages = null;
+    //     }, 3000);
+    //   });
+
+      // Track the request and show its progress to the user.
+      $scope.progress.addPromise($promise);
+
   };
 
   $scope.logout = function() {
