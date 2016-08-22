@@ -169,7 +169,32 @@ router.get('/doctorGet', function(req, res, next) {
       console.log(err);
     }
   });
+});
 
+router.get('/doctorEdit', function(req, res, next) {
+
+  var id = req.query.id;
+
+  pg.connect(connection, function(err, client, done) {
+
+    var doctor = [];
+
+    var query = client.query('UPDATE userprofile SET firstname=$1, lastname=$2, email=$3, phone=$4, adminflag=$5, username=$6 WHERE id=$7', [req.query.firstname, req.query.lastname, req.query.email, req.query.phone, req.query.adminflag, req.query.username, id]);
+
+    query.on('row', function(row) {
+      doctor.push(row);
+    });
+
+    query.on('end', function() {
+      client.end();
+      return res.json(doctor);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
 });
 
 module.exports = router;

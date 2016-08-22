@@ -209,45 +209,8 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
       }, 3000);
     });
 
-    // .then(function(response) {
-    //   if(response.data) {
-    //     if (response.data.name === 'error') {
-    //         console.log(response);
-    //         alert('This username already exists. Please pick a new one.');             //TODO: Improve user alerts
-    //       } else {
-    //         alert('Your account has been created. Please log in on the next screen.');    //TODO: Improve user alerts
-    //       }
-    //   } else {
-    //     console.log('error');
-    //   }
-    // });
-
-    // Perform JSONP request.
-    // var $promise = $http.jsonp('/register', doctorToAdd)
-    //   .success(function(data, status, headers, config) {
-    //     if (data.status == 'OK') {
-    //       $scope.newDoctor = null;
-    //       $scope.messages = 'Your form has been sent!';
-    //       $scope.submitted = false;
-    //     } else {
-    //       $scope.messages = 'Oops, we received your request, but there was an error processing it.';
-    //       $log.error(data);
-    //     }
-    //   })
-    //   .error(function(data, status, headers, config) {
-    //     $scope.progress = data;
-    //     $scope.messages = 'There was a network error. Try again later.';
-    //     $log.error(data);
-    //   })
-    //   .finally(function() {
-    //     // Hide status messages after three seconds.
-    //     $timeout(function() {
-    //       $scope.messages = null;
-    //     }, 3000);
-    //   });
-
-      // Track the request and show its progress to the user.
-      $scope.progress.addPromise($promise);
+    // Track the request and show its progress to the user.
+    $scope.progress.addPromise($promise);
 
   };
 
@@ -263,6 +226,55 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
       });
     }
 
+  }
+
+  $scope.edit = function(type, form, id) {
+
+    $scope.submitted = true;
+
+    if (form.$invalid) {
+      console.log('invalid form');
+      return;
+    }
+
+    var doctorToEdit = $scope.editDoctor;
+    doctorToAdd.doctorflag = 1;
+
+    if (doctorToEdit.adminflag === 'true')
+    {
+      doctorToEdit.adminflag = 1;
+    } else {
+      doctorToEdit.adminflag = 0;
+    }
+
+
+    console.log(doctorToEdit);
+
+    var $promise = $http.post('/doctorDashboard/doctorEdit/', doctorToEdit)
+    .success(function(data, status, headers, config) {
+      if (status === 200) {
+        $scope.editDoctor = null;
+        $scope.messages = 'Changes to ' + config.data.firstName + ' ' + config.data.lastName + ' have been saved!';
+        $scope.submitted = false;
+        doctorList();
+      } else {
+        $scope.messages = 'Oops, we received your request, but there was an error processing it.';
+        $log.error(data);
+      }
+    })
+    .error(function(data, status, headers, config) {
+      $scope.progress = data;
+      $scope.messages = 'There was a network error. Try again later.';
+      $log.error(data);
+    })
+    .finally(function() {
+      // Hide status messages after three seconds.
+      $timeout(function() {
+        $scope.messages = null;
+      }, 3000);
+    });
+
+    $scope.progress.addPromise($promise);
 
   }
 
@@ -281,10 +293,10 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     console.log('delete:', type, id);
   }
 
-  $scope.edit = function(type, id)
-  {
-    console.log('edit:', type, id);
-  }
+  // $scope.edit = function(type, id)
+  // {
+  //   console.log('edit:', type, id);
+  // }
 
   function initializePage() {
     myPatientList();
