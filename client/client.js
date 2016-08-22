@@ -225,22 +225,30 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
         $scope.preDoctor = response.data[0];
       });
     }
-
   }
 
   $scope.edit = function(type, form, id) {
 
     $scope.submitted = true;
 
-    if (form.$invalid) {
-      console.log('invalid form');
-      return;
-    }
+    // if (form.$invalid) {
+    //   console.log('invalid form');
+    //   return;
+    // }
 
-    var doctorToEdit = $scope.editDoctor;
-    doctorToAdd.doctorflag = 1;
+    console.log('editDoctor', $scope.editDoctor);
+    var doctorToEdit = {};
 
-    if (doctorToEdit.adminflag === 'true')
+    doctorToEdit.id = id;
+    doctorToEdit.firstname = $scope.editDoctor.firstname != null ? $scope.editDoctor.firstname : $scope.preDoctor.firstname;
+    doctorToEdit.lastname = $scope.editDoctor.lastname != null ? $scope.editDoctor.lastname : $scope.preDoctor.lastname;
+    doctorToEdit.phone = $scope.editDoctor.phone != null ? $scope.editDoctor.phone : $scope.preDoctor.phone;
+    doctorToEdit.email = $scope.editDoctor.email != null ? $scope.editDoctor.email : $scope.preDoctor.email;
+    doctorToEdit.username = $scope.editDoctor.username != null ? $scope.editDoctor.username : $scope.preDoctor.username;
+
+    doctorToEdit.doctorflag = 1;
+
+    if ($scope.editDoctor.adminflag === 'true')
     {
       doctorToEdit.adminflag = 1;
     } else {
@@ -248,15 +256,16 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     }
 
 
-    console.log(doctorToEdit);
+    console.log('edit', doctorToEdit);
 
     var $promise = $http.post('/doctorDashboard/doctorEdit/', doctorToEdit)
     .success(function(data, status, headers, config) {
       if (status === 200) {
-        $scope.editDoctor = null;
-        $scope.messages = 'Changes to ' + config.data.firstName + ' ' + config.data.lastName + ' have been saved!';
+        console.log('config', config);
+        $scope.preDoctor = doctorEdit;
+        $scope.editDoctor = {};
+        $scope.messages = 'Changes to ' + config.data.firstname + ' ' + config.data.lastname + ' have been saved!';
         $scope.submitted = false;
-        doctorList();
       } else {
         $scope.messages = 'Oops, we received your request, but there was an error processing it.';
         $log.error(data);
@@ -268,9 +277,10 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
       $log.error(data);
     })
     .finally(function() {
+      doctorList();
       // Hide status messages after three seconds.
       $timeout(function() {
-        $scope.messages = null;
+        $scope.messages = '';
       }, 3000);
     });
 

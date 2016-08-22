@@ -148,6 +148,7 @@ router.get('/doctorList', function(req, res, next) {
 router.get('/doctorGet', function(req, res, next) {
 
   var id = req.query.id;
+  console.log('doctorGet id:', id);
 
   pg.connect(connection, function(err, client, done) {
 
@@ -171,15 +172,18 @@ router.get('/doctorGet', function(req, res, next) {
   });
 });
 
-router.get('/doctorEdit', function(req, res, next) {
+router.post('/doctorEdit', function(req, res, next) {
 
   var id = req.query.id;
+  console.log(req.body);
 
   pg.connect(connection, function(err, client, done) {
 
     var doctor = [];
 
-    var query = client.query('UPDATE userprofile SET firstname=$1, lastname=$2, email=$3, phone=$4, adminflag=$5, username=$6 WHERE id=$7', [req.query.firstname, req.query.lastname, req.query.email, req.query.phone, req.query.adminflag, req.query.username, id]);
+    var query = client.query('UPDATE userprofile SET firstname=$1, lastname=$2, email=$3, phone=$4, adminflag=$5, username=$6 WHERE id=$7', [req.body.firstname, req.body.lastname, req.body.email, req.body.phone, req.body.adminflag, req.body.username, req.body.id]);
+
+    // console.log(query);
 
     query.on('row', function(row) {
       doctor.push(row);
