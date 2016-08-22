@@ -145,6 +145,31 @@ router.get('/doctorList', function(req, res, next) {
   });
 });
 
+router.get('/doctorGet', function(req, res, next) {
 
+  var id = req.query.id;
+
+  pg.connect(connection, function(err, client, done) {
+
+    var doctor = [];
+
+    var query = client.query('SELECT * FROM userprofile WHERE id = $1 LIMIT 1', [id]);
+
+    query.on('row', function(row) {
+      doctor.push(row);
+    });
+
+    query.on('end', function() {
+      client.end();
+      return res.json(doctor);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+
+});
 
 module.exports = router;

@@ -121,6 +121,8 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
   $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
   $scope.newDoctor = {};
+  $scope.editDoctor = {};
+  var idHolder;
   $scope.myPatientList = [];
   $scope.managePatientsList = [];
   $scope.resourcesList = [];
@@ -176,25 +178,18 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     var doctorToAdd = $scope.newDoctor;
     doctorToAdd.doctorflag = 1;
 
-    if (doctorToAdd.adminflag == 'true')
+    if (doctorToAdd.adminflag === 'true')
     {
       doctorToAdd.adminflag = 1;
     } else {
       doctorToAdd.adminflag = 0;
     }
 
-    console.log(doctorToAdd);
-
     var $promise = $http.post('/register/addDoctor', doctorToAdd)
     .success(function(data, status, headers, config) {
-      console.log('data', data);
-      console.log('status', status);
-      console.log('headers', headers);
-      console.log('config', config);
-
-      if (status == 200) {
+      if (status === 200) {
         $scope.newDoctor = null;
-        $scope.messages = config.data.firstName + ' ' + config.data.lastName + 'has been added!';
+        $scope.messages = config.data.firstName + ' ' + config.data.lastName + ' has been added!';
         $scope.submitted = false;
         doctorList();
       } else {
@@ -255,6 +250,21 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
       $scope.progress.addPromise($promise);
 
   };
+
+  $scope.beginEdit = function(type, id) {
+
+    idHolder = id;
+    console.log(idHolder);
+
+    if (type === 'manageDoctors')
+    {
+      $http.get('/doctorDashboard/doctorGet/', {params: {id: id}}).then(function(response) {
+        $scope.preDoctor = response.data[0];
+      });
+    }
+
+
+  }
 
   $scope.logout = function() {
     //TODO: create proper logout service
@@ -370,6 +380,7 @@ app.factory('AuthService', ['$location', '$q', '$timeout', '$http', function ($l
 
       isLoggedIn = false;
       User = {};
+      console.log(user);
     // create a new instance of deferred
       var deferred = $q.defer();
       // send a post request to the server
