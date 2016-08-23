@@ -233,15 +233,11 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
     $scope.submitted = true;
 
-    // if (form.$invalid) {
-    //   console.log('invalid form');
-    //   return;
-    // }
-
     console.log('editDoctor', $scope.editDoctor);
     var doctorToEdit = $scope.preDoctor;
 
     doctorToEdit.id = id;
+
     doctorToEdit.firstname = $scope.editDoctor.firstname != null ? $scope.editDoctor.firstname : $scope.preDoctor.firstname;
     doctorToEdit.lastname = $scope.editDoctor.lastname != null ? $scope.editDoctor.lastname : $scope.preDoctor.lastname;
     doctorToEdit.phone = $scope.editDoctor.phone != null ? $scope.editDoctor.phone : $scope.preDoctor.phone;
@@ -290,6 +286,49 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
   }
 
+  $scope.beginDelete = function(type, id) {
+
+    $scope.preDoctor = {};
+    idHolder = id;
+    console.log(idHolder);
+
+    if (type === 'manageDoctors') {
+      $http.get('/doctorDashboard/doctorGet/', {params: {id: id}}).then(function(response) {
+        $scope.preDoctor = response.data[0];
+      });
+    }
+  }
+
+  $scope.delete = function(type, id) {
+
+    idHolder = {id: id};
+
+    console.log('delete id:', idHolder)
+
+    if (type === 'manageDoctors') {
+      console.log('manageDoctorsDelete hit');
+      $http.post('/doctorDashboard/doctorDelete/', idHolder)
+        .success(function(data, status, headers, config) {
+          if (status === 200) {
+            $scope.preDoctor = null;
+          } else {
+            alert('Oops, we received your request, but there was an error processing it.');
+            $log.error(data);
+          }
+        })
+        .error(function(data, status, headers, config) {
+          // $scope.progress = data;
+          alert('There was a network error. Try again later.');
+          $log.error(data);
+        })
+        .finally(function() {
+          doctorList();
+        })
+      }
+    }
+
+
+
   $scope.logout = function() {
     //TODO: create proper logout service
     AuthService.logout();
@@ -299,11 +338,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   $scope.goTo = function(locationId) {
     anchorSmoothScroll.scrollTo(locationId);
   };
-
-  $scope.delete = function(type, id)
-  {
-    console.log('delete:', type, id);
-  }
 
   // $scope.edit = function(type, id)
   // {

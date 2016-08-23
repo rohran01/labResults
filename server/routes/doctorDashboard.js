@@ -148,7 +148,6 @@ router.get('/doctorList', function(req, res, next) {
 router.get('/doctorGet', function(req, res, next) {
 
   var id = req.query.id;
-  console.log('doctorGet id:', id);
 
   pg.connect(connection, function(err, client, done) {
 
@@ -174,9 +173,6 @@ router.get('/doctorGet', function(req, res, next) {
 
 router.post('/doctorEdit', function(req, res, next) {
 
-  var id = req.query.id;
-  console.log(req.body);
-
   pg.connect(connection, function(err, client, done) {
 
     var doctor = [];
@@ -200,5 +196,36 @@ router.post('/doctorEdit', function(req, res, next) {
     }
   });
 });
+
+router.post('/doctorDelete', function(req, res, next) {
+
+  console.log('delete hit');
+  var id = req.body.id;
+  console.log(id);
+
+  pg.connect(connection, function(err, client, done) {
+
+    var doctor = [];
+
+    var query = client.query('UPDATE userprofile SET activeflag=$1 WHERE id=$2', ['0', id]);
+
+    // console.log(query);
+
+    query.on('row', function(row) {
+      doctor.push(row);
+    });
+
+    query.on('end', function() {
+      client.end();
+      return res.json(doctor);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+});
+
 
 module.exports = router;
