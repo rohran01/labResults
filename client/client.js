@@ -117,10 +117,11 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 
 }]);
 
-app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$log', 'anchorSmoothScroll', 'AuthService', 'promiseTracker', function($scope, $http, $location, $log, anchorSmoothScroll, AuthService, promiseTracker) {
+app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$log', '$timeout', 'anchorSmoothScroll', 'AuthService', 'promiseTracker', function($scope, $http, $location, $log, $timeout, anchorSmoothScroll, AuthService, promiseTracker) {
 
   $scope.currentUser = AuthService.getUserStatus();  //TODO: uncomment -- commented out for remote testing
   $scope.newDoctor = {};
+  $scope.preDoctor = {};
   $scope.editDoctor = {};
   var idHolder;
   $scope.myPatientList = [];
@@ -216,6 +217,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
   $scope.beginEdit = function(type, id) {
 
+    $scope.preDoctor = {};
     idHolder = id;
     console.log(idHolder);
 
@@ -237,7 +239,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     // }
 
     console.log('editDoctor', $scope.editDoctor);
-    var doctorToEdit = {};
+    var doctorToEdit = $scope.preDoctor;
 
     doctorToEdit.id = id;
     doctorToEdit.firstname = $scope.editDoctor.firstname != null ? $scope.editDoctor.firstname : $scope.preDoctor.firstname;
@@ -262,7 +264,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     .success(function(data, status, headers, config) {
       if (status === 200) {
         console.log('config', config);
-        $scope.preDoctor = doctorEdit;
+        $scope.preDoctor = doctorToEdit;
         $scope.editDoctor = {};
         $scope.messages = 'Changes to ' + config.data.firstname + ' ' + config.data.lastname + ' have been saved!';
         $scope.submitted = false;
@@ -280,7 +282,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
       doctorList();
       // Hide status messages after three seconds.
       $timeout(function() {
-        $scope.messages = '';
+        $scope.messages = null;
       }, 3000);
     });
 
