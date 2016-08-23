@@ -65,14 +65,183 @@
                     <p class="col s6"><b>Phone: </b>{{patient.phone}}</p>
                     <p class="col s6"><b>Email: </b>{{patient.email}}</p>
                     <div class="col s12">
-                      <i ng-click="delete('managePatients', patient.id)" class="right material-icons">delete</i>
-                      <i ng-click="edit('managePatients', patient.id)" class="right material-icons">mode_edit</i>
+                      <i ng-click="beginDelete('managePatients', patient.id)" modal-trigger data-target="deletePatientModal" class="right material-icons">delete</i>
+                      <i ng-click="beginEdit('managePatients', patient.id)" modal-trigger data-target="editPatientModal" class="right material-icons">mode_edit</i>
                     </div>
                     <div class="clearfix"></div>
                 </div>
               </li>
             </ul>
+            <button modal-trigger data-target="addPatientModal" class="btn waves-effect waves-light">Add New Patient</button>
           </div>
+
+          <div id="addPatientModal" class="modal">
+            <div class="modal-content">
+              <h4>Add New Doctor</h4>
+              <div class="create-doctor">
+                <form novalidate role="form" name="addDoctor">
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">face</i>
+                      <input  ng-model="newDoctor.firstName" id="firstName" type="text" class="validate" required />
+                      <label for="firstName">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix">face</i>
+                      <input  ng-model="newDoctor.lastName" id="lastName" type="text" class="validate" required />
+                      <label for="lastName">Last Name</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix">mail_outline</i>
+                      <input  ng-model="newDoctor.email" id="email" type="email" class="validate" required />
+                      <label for="email">Email</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix">phone</i>
+                      <input  ng-model="newDoctor.phone" id="phone" type="tel" class="validate" required />
+                      <label for="phone">Phone Number</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <p class="col s4">
+                        <label>Administrator:</label>
+                      </p>
+                      <p class="col s4">
+                        <input class="with-gap" ng-model="newDoctor.adminflag" value=true name="admin" type="radio" id="adminYes"   />
+                        <label for="adminYes">Yes</label>
+                      </p>
+                      <p class="col s4">
+                        <input class="with-gap" ng-model="newDoctor.adminflag" value=false name="admin" type="radio" id="adminNo"   />
+                        <label for="adminNo">No</label>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix">account_box</i>
+                      <input  ng-model="newDoctor.username" id="username" type="text" class="validate" required />
+                      <label for="username">Username</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">vpn_key</i>
+                      <input ng-model="newDoctor.password" id="password" type="password" class="validate" required >
+                      <label for="password">Password</label>
+                    </div>
+                  </div>
+                  <div id="messages" class="alert alert-success" data-ng-show="messages" data-ng-bind="messages"></div>
+                  <div data-ng-show="progress.active()">Sending…</div>
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <button data-ng-disabled="progress.active()" ng-click="createDoctor(addDoctor)" class="modal-action btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                    </div>
+                    <div class="input-field col s6">
+                      <button class="modal-close btn waves-effect waves-light">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!--Edit Doctor Modal Structure-->
+          <div id="editPatientModal" class="modal">
+            <div class="modal-content">
+              <h4>Edit Doctor</h4>
+              <div class="edit-doctor">
+                <form novalidate role="form" name="doctorEdit" class="ng-valid">
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix active">face</i>
+                      <input  ng-model="editDoctor.firstname"  ng-value="preDoctor.firstname" id="firstName" type="text" class="validate ng-valid ng-touched valid ng-not-empty ng-valid-parse ng-valid-required" required />
+                      <label for="firstName" class="active">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                      <i class="material-icons prefix active">face</i>
+                      <input  ng-model="editDoctor.lastname"  ng-value="preDoctor.lastname" id="lastName" type="text" class="validate ng-valid valid ng-touched ng-not-empty ng-valid-parse ng-valid-required" required />
+                      <label for="lastName" class="active ">Last Name</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix active">mail_outline</i>
+                      <input  ng-model="editDoctor.email"  ng-value="preDoctor.email" id="email" type="email" class="validate ng-valid ng-touched valid ng-not-empty ng-valid-parse ng-valid-required" required />
+                      <label for="email" class="active ">Email</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix active">phone</i>
+                      <input  ng-model="editDoctor.phone"  ng-value="preDoctor.phone" id="phone" type="tel" class="validate ng-valid ng-touched valid ng-not-empty ng-valid-parse ng-valid-required" required />
+                      <label for="phone" class="active">Phone Number</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- <div class="input-field col s12"> -->
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <div class="col s4">
+                        <label>Administrator:</label>
+                      </div>
+                      <div class="col s4 switch">
+                        <label>
+                          No
+                          <input ng-model="editDoctor.adminflag" ng-value="preDoctor.adminflag" type="checkbox" class="validate ng-valid ng-touched valid ng-not-empty ng-valid-parse ng-valid-required" required>
+                          <span class="lever"></span>
+                          Yes
+                        </label>
+                        <div class="clearfix"></div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <!-- <i class="flaticon-abacus-hand-drawn-tool prefix"></i> -->
+                      <i class="material-icons prefix active">account_box</i>
+                      <input  ng-model="editDoctor.username" ng-value="preDoctor.username" id="username" type="text" class="validate ng-valid valid ng-touched ng-not-empty ng-valid-parse ng-valid-required" required />
+                      <label for="username" class="active ">Username</label>
+                    </div>
+                  </div>
+                  <div id="messages" class="alert alert-success" data-ng-show="messages" data-ng-bind="messages"></div>
+                  <div data-ng-show="progress.active()">Sending…</div>
+                  <div class="row">
+                    <div class="input-field col s6">
+                      <button data-ng-disabled="progress.active()" ng-click="edit('manageDoctors', doctorEdit, preDoctor
+                      .id)" class="modal-action btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                    </div>
+                    <div class="input-field col s6">
+                      <button class="modal-close btn waves-effect waves-light">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!--Delete Doctor Modal Structure-->
+          <div id="deletePatientModal" class="modal">
+            <div class="modal-content">
+              <h4>Delete Patient</h4>
+              <div>
+                <p>Are you sure you would like to delete {{prePatient.firstname}}  {{prePatient.lastname}}?  Once you do, it cannot be undone.</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button ng-click="delete('managePatients', prePatient.id)" class="modal-action modal-close waves-effect btn-flat">Yes</button>
+              <button class="modal-action modal-close waves-effect btn-flat">No</button>
+            </div>
+          </div>
+
 
           <div id="manageResources" class="section scrollspy">
             <h4>Manage Resources</h4>
@@ -132,8 +301,6 @@
             </ul>
 
             <button modal-trigger data-target="addDoctorModal" class="btn waves-effect waves-light">Add New Doctor</button>
-
-            <!-- <button modal-trigger data-target="addDoctorModal" class="btn waves-effect waves-light">Modal</button> -->
 
             <!-- Create Doctor Modal Structure -->
             <div id="addDoctorModal" class="modal">

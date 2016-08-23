@@ -289,12 +289,19 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   $scope.beginDelete = function(type, id) {
 
     $scope.preDoctor = {};
+    $scope.prePatient = {};
     idHolder = id;
     console.log(idHolder);
 
     if (type === 'manageDoctors') {
       $http.get('/doctorDashboard/doctorGet/', {params: {id: id}}).then(function(response) {
         $scope.preDoctor = response.data[0];
+      });
+    }
+
+    if (type === 'managePatients') {
+      $http.get('/doctorDashboard/patientGet/', {params: {id: id}}).then(function(response) {
+        $scope.prePatient = response.data[0];
       });
     }
   }
@@ -305,12 +312,13 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
     console.log('delete id:', idHolder)
 
-    if (type === 'manageDoctors') {
+    if (type === 'manageDoctors' || type === 'managePatients') {
       console.log('manageDoctorsDelete hit');
-      $http.post('/doctorDashboard/doctorDelete/', idHolder)
+      $http.post('/doctorDashboard/userDelete/', idHolder)
         .success(function(data, status, headers, config) {
           if (status === 200) {
             $scope.preDoctor = null;
+            $scope.prePatient = null;
           } else {
             alert('Oops, we received your request, but there was an error processing it.');
             $log.error(data);
@@ -322,10 +330,17 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
           $log.error(data);
         })
         .finally(function() {
-          doctorList();
+          if (type === 'manageDoctors') {
+            doctorList();
+          }
+          if (type === 'managePatients') {
+            console.log('reloading patients');
+            managePatientsList();
+          }
         })
       }
     }
+
 
 
 

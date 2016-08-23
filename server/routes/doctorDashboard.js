@@ -61,6 +61,32 @@ router.get('/managePatientsList', function(req, res, next) {
   });
 });
 
+router.get('/patientGet', function(req, res, next) {
+
+  var id = req.query.id;
+
+  pg.connect(connection, function(err, client, done) {
+
+    var patient = [];
+
+    var query = client.query('SELECT * FROM userprofile WHERE id = $1 LIMIT 1', [id]);
+
+    query.on('row', function(row) {
+      patient.push(row);
+    });
+
+    query.on('end', function() {
+      client.end();
+      return res.json(patient);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+});
+
 router.get('/resourcesList', function(req, res, next) {
 
   console.log('resources list hit');
@@ -197,7 +223,7 @@ router.post('/doctorEdit', function(req, res, next) {
   });
 });
 
-router.post('/doctorDelete', function(req, res, next) {
+router.post('/userDelete', function(req, res, next) {
 
   console.log('delete hit');
   var id = req.body.id;
@@ -205,19 +231,19 @@ router.post('/doctorDelete', function(req, res, next) {
 
   pg.connect(connection, function(err, client, done) {
 
-    var doctor = [];
+    var user = [];
 
     var query = client.query('UPDATE userprofile SET activeflag=$1 WHERE id=$2', ['0', id]);
 
     // console.log(query);
 
     query.on('row', function(row) {
-      doctor.push(row);
+      user.push(row);
     });
 
     query.on('end', function() {
       client.end();
-      return res.json(doctor);
+      return res.json(user);
     });
 
     // Handle Errors
