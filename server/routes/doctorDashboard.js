@@ -38,11 +38,38 @@ router.get('/myPatientList', function(req, res, next) {
 router.get('/managePatientsList', function(req, res, next) {
 
   console.log('manage patients list hit');
-  var managePatientsList = [];
+  var id = req.query.id;
+  var relationshipList = [];
 
   pg.connect(connection, function(err, client, done) {
 
     var query = client.query('SELECT id, username, firstname, lastname, email, birthdate, gender, accensionnumber FROM userprofile WHERE activeflag = $1 AND patientflag = $1', ['1']);
+
+    query.on('row', function(row) {
+      relationshipList.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', function() {
+      client.end();
+      return res.json(relationshipList);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+});
+
+router.get('/managePatientsRelationships', function(req, res, next) {
+
+  console.log('manage patients list hit');
+  var managePatientsList = [];
+
+  pg.connect(connection, function(err, client, done) {
+
+    var query = client.query('SELECT id, firstname, lastname FROM userprofile WHERE id IN (SELECT doctorid FROM doctorpatient WHERE patientid = $1)', ['1']);
 
     query.on('row', function(row) {
       managePatientsList.push(row);

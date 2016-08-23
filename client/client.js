@@ -123,13 +123,14 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   $scope.newDoctor = {};
   $scope.preDoctor = {};
   $scope.editDoctor = {};
-  var idHolder;
   $scope.myPatientList = [];
   $scope.managePatientsList = [];
+  $scope.managePatientsList.doctors = [];
   $scope.resourcesList = [];
   $scope.encouragementList = [];
   $scope.doctorList = [];
   $scope.progress = promiseTracker();
+  var idHolder = '';
 
   if ($scope.currentUser.adminflag) {
     $scope.admin = true;
@@ -143,10 +144,31 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   }
 
   function managePatientsList() {
-    $http.get('/doctorDashboard/managePatientsList').then(function(response) {
+
+    $http.get('/doctorDashboard/managePatientsList')
+    .then(function(response) {
       $scope.managePatientsList = response.data;
-    });
+    }).finally(function() {
+      console.log('length:', $scope.managePatientsList.length)
+      angular.forEach($scope.managePatientsList, function(patient) {
+        // console.log(patient);
+        var id = patient.id;
+        $http.get('/doctorDashboard/managePatientsRelationships/', {params: {id: id}})
+          .then(function(response) {
+            console.log(response.data);
+            patient.doctors = response.data;
+            console.log(patient);
+          })
+      })
+      console.log('final list?', $scope.managePatientsList);
+    })
   }
+
+
+
+
+
+
 
   function resourcesList() {
     $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
@@ -334,7 +356,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
             doctorList();
           }
           if (type === 'managePatients') {
-            console.log('reloading patients');
             managePatientsList();
           }
         })
