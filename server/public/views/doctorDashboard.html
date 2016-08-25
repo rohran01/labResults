@@ -65,11 +65,15 @@
                     <p class="col s6"><b>Phone: </b>{{patient.phone}}</p>
                     <p class="col s6"><b>Email: </b>{{patient.email}}</p>
                     <p class="col s12"><b>Assigned Doctor(s): </b><span ng-repeat="doctor in patient.doctors track by $index"><span ng-if="$index > 0">, </span>{{doctor.firstname}} {{doctor.lastname}}</span></p>
-                    <ul collapse class="collapsible" data-collapsible="accordion" watch>
-                      <li>
-                        Testing
-                      </li>
-                    </ul>
+                    <div class="col s12">
+                      <p class="col s12"><b>Foods</b></p>
+                      <div ng-repeat="category in patient.categories">
+                        <p class="col s12"><b>{{category}}</b></p>
+                        <!-- <p ng-repeat="food in category" class="col s6">
+                          <b>{{food.name}}</b>
+                        </p> -->
+                      </div>
+                    </div>
                     <div class="col s12">
                       <i ng-click="beginDelete('managePatients', patient.id)" modal-trigger data-target="deletePatientModal" class="right material-icons">delete</i>
                       <i ng-click="beginEdit('managePatients', patient.id)" modal-trigger data-target="editPatientModal" class="right material-icons">mode_edit</i>

@@ -137,7 +137,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   }
 
   function myPatientList() {
-    console.log('my patient list id:', $scope.currentUser);
     $http.get('/doctorDashboard/myPatientList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.myPatientList = response.data;
     });
@@ -147,15 +146,59 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     $http.get('/doctorDashboard/managePatientsList')
     .then(function(response) {
       $scope.managePatientsList = response.data;
-    }).finally(function() {
       angular.forEach($scope.managePatientsList, function(patient) {
         var id = patient.id;
-        $http.get('/doctorDashboard/managePatientsRelationships/', {params: {id: id}})
-          .then(function(response) {
-            console.log(response.data);
-            patient.doctors = response.data;
-            console.log(patient);
-          });
+        // console.log(id);
+        // $http.get('/doctorDashboard/managePatientsRelationships/', {params: {id: id}})
+        // .success(function(data, status, headers, config) {
+        //   if (status === 200) {
+        //     patient.doctors = data
+        //   } else {
+        //     $log.error('else', data);
+        //   }
+        // })
+        // .error(function(data, status, headers, config) {
+        //   $log.error(data);
+        // })
+        // .finally(function() {
+        //   // Hide status messages after three seconds.
+        // });
+        //   .then(function(response) {
+        //     console.log()
+        //     patient.doctors = response.data;
+        //   });
+        $http.get('/doctorDashboard/foodCategories')
+        .success(function(data, status, headers, config) {
+          if (status === 200) {
+            console.log(data);
+            patient.categories = data
+          } else {
+            $log.error('else', data);
+          }
+        })
+        .error(function(data, status, headers, config) {
+          $log.error(data);
+        })
+        .finally(function() {
+          // Hide status messages after three seconds.
+        });
+        //   .then(function(response) {
+        //     patient.categories = response.data;
+        //     console.log('patient', patient);
+          // })
+        // .then(function() {
+        //     return $http.get('/doctorDashboard/allFoods', {params: {category: patient.categories}})
+        //     .then(function(response) {
+        //       console.log(response);
+        //     });
+
+          // })
+
+            // angular.forEach(patient.categories, function(category) {
+              // console.log('category:', category);
+
+            // });
+          // });
       });
     });
   }
@@ -175,7 +218,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   function doctorList() {
     $http.get('/doctorDashboard/doctorList').then(function(response) {
       $scope.doctorList = response.data;
-      console.log('doctor list:', $scope.doctorList);
     });
   }
 
@@ -231,7 +273,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
     $scope.preDoctor = {};
     idHolder = id;
-    console.log(idHolder);
 
     if (type === 'manageDoctors')
     {
@@ -302,7 +343,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     $scope.preDoctor = {};
     $scope.prePatient = {};
     idHolder = id;
-    console.log(idHolder);
 
     if (type === 'manageDoctors') {
       $http.get('/doctorDashboard/doctorGet/', {params: {id: id}}).then(function(response) {
@@ -322,7 +362,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     idHolder = {id: id};
 
     if (type === 'manageDoctors' || type === 'managePatients') {
-      console.log('manageDoctorsDelete hit');
       $http.post('/doctorDashboard/userDelete/', idHolder)
         .success(function(data, status, headers, config) {
           if (status === 200) {

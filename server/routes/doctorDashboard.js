@@ -37,7 +37,6 @@ router.get('/myPatientList', function(req, res, next) {
 
 router.get('/managePatientsList', function(req, res, next) {
 
-  console.log('manage patients list hit');
   var id = req.query.id;
   var relationshipList = [];
 
@@ -64,7 +63,6 @@ router.get('/managePatientsList', function(req, res, next) {
 
 router.get('/managePatientsRelationships', function(req, res, next) {
 
-  console.log('manage patients list hit');
   var managePatientsList = [];
 
   pg.connect(connection, function(err, client, done) {
@@ -79,6 +77,60 @@ router.get('/managePatientsRelationships', function(req, res, next) {
     query.on('end', function() {
       client.end();
       return res.json(managePatientsList);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+});
+
+router.get('/foodCategories', function(req, res, next) {
+
+  var categories = [];
+
+  pg.connect(connection, function(err, client, done) {
+
+    var query = client.query('SELECT DISTINCT category FROM foods');
+
+    query.on('row', function(row) {
+      categories.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', function() {
+      client.end();
+      return res.json(categories);
+    });
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+  });
+
+});
+
+router.get('/allFoods', function(req, res, next) {
+
+  console.log('all foods hit');
+  var category = req.params.category;
+  console.log('category:', category);
+  var foods = [];
+
+  pg.connect(connection, function(err, client, done) {
+
+    var query = client.query('SELECT DISTINCT name FROM foods WHERE category = $1', [category]);
+
+    query.on('row', function(row) {
+      foods.push(row);
+    });
+
+    // After all data is returned, close connection and return results
+    query.on('end', function() {
+      client.end();
+      return res.json(foods);
     });
 
     // Handle Errors
