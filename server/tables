@@ -1,0 +1,116 @@
+CREATE TABLE foods
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name varchar(255) NOT NULL
+)
+
+INSERT INTO foods (name, category) VALUES ('casein', 'dairy');
+INSERT INTO foods (name, category) VALUES ('cheese, cheddar', 'dairy');
+INSERT INTO foods (name, category) VALUES ('cheese, cottage', 'dairy');
+INSERT INTO foods (name, category) VALUES ('cheese, mozzarella', 'dairy');
+INSERT INTO foods (name, category) VALUES ('milk', 'dairy');
+INSERT INTO foods (name, category) VALUES ('milk, goat', 'dairy');
+INSERT INTO foods (name, category) VALUES ('whey', 'dairy');
+INSERT INTO foods (name, category) VALUES ('yogurt', 'dairy');
+
+INSERT INTO foods (name, category) VALUES ('beef', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('chicken', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('eg white, chicken', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('egg whole, duck', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('egg yolk, chicken', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('lamb', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('pork', 'meat/fowl');
+INSERT INTO foods (name, category) VALUES ('turkey', 'meat/fowl');
+
+INSERT INTO foods (name, category) VALUES ('cocoa bean', 'misc');
+INSERT INTO foods (name, category) VALUES ('coffee bean', 'misc');
+INSERT INTO foods (name, category) VALUES ('honey, bee', 'misc');
+INSERT INTO foods (name, category) VALUES ('sugar cane', 'misc');
+INSERT INTO foods (name, category) VALUES ('yeast, baker''s', 'misc');
+INSERT INTO foods (name, category) VALUES ('yeast, brewer''s', 'misc');
+
+INSERT INTO foods (name, category) VALUES ('apple', 'fruits');
+INSERT INTO foods (name, category) VALUES ('apricot', 'fruits');
+INSERT INTO foods (name, category) VALUES ('banana', 'fruits');
+INSERT INTO foods (name, category) VALUES ('blueberry', 'fruits');
+INSERT INTO foods (name, category) VALUES ('cranberry', 'fruits');
+INSERT INTO foods (name, category) VALUES ('grape', 'fruits');
+INSERT INTO foods (name, category) VALUES ('grapefruit', 'fruits');
+INSERT INTO foods (name, category) VALUES ('lemon', 'fruits');
+INSERT INTO foods (name, category) VALUES ('orange', 'fruits');
+INSERT INTO foods (name, category) VALUES ('papaya', 'fruits');
+INSERT INTO foods (name, category) VALUES ('peach', 'fruits');
+INSERT INTO foods (name, category) VALUES ('pear', 'fruits');
+INSERT INTO foods (name, category) VALUES ('pineapple', 'fruits');
+INSERT INTO foods (name, category) VALUES ('plum', 'fruits');
+INSERT INTO foods (name, category) VALUES ('raspberry', 'fruits');
+INSERT INTO foods (name, category) VALUES ('strawberry', 'fruits');
+
+INSERT INTO foods (name, category) VALUES ('clam', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('cod', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('crab', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('halibut', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('lobster', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('red snapper', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('salmon', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('scallop', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('shrimp', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('sole', 'fish/crustacea/mollusk');
+INSERT INTO foods (name, category) VALUES ('tuna', 'fish/crustacea/mollusk');
+
+INSERT INTO foods (name, category) VALUES ('almond', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('amaranth', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('barley', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('bean, kidney', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('bean, lima', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('bean, pinto', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('bean, soy', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('bean, string', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('buckwheat', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('coconut', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('corn', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('gliadin, wheat', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('gluten, wheat', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('hazelnut', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('lentil', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('oat', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('pea, green', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('peanut', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('pecan', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('rice, white', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('rye', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('sesame seed', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('spelt', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('sunflower seed', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('walnut, english', 'grains/legumes/nuts');
+INSERT INTO foods (name, category) VALUES ('wheat, whole', 'grains/legumes/nuts');
+
+INSERT INTO foods (name, category) VALUES ('avocado', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('beet', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('broccoli', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('cabbage', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('carrot', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('cauliflower', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('celery', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('cucumber', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('garlic', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('lettuce', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('mushroom', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('olive', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('onion', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('pepper, green bell', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('potato, sweet', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('potato, white', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('pumpkin', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('radish', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('spinach', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('squash, zucchini', 'vegetables');
+INSERT INTO foods (name, category) VALUES ('tomato', 'vegetables');
+
+CREATE TABLE userfoods
+(
+    id SERIAL NOT NULL PRIMARY KEY,
+    userid int NOT NULL,
+    foodid int NOT NULL,
+    scale int NOT NULL
+)

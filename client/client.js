@@ -144,31 +144,21 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   }
 
   function managePatientsList() {
-
     $http.get('/doctorDashboard/managePatientsList')
     .then(function(response) {
       $scope.managePatientsList = response.data;
     }).finally(function() {
-      console.log('length:', $scope.managePatientsList.length)
       angular.forEach($scope.managePatientsList, function(patient) {
-        // console.log(patient);
         var id = patient.id;
         $http.get('/doctorDashboard/managePatientsRelationships/', {params: {id: id}})
           .then(function(response) {
             console.log(response.data);
             patient.doctors = response.data;
             console.log(patient);
-          })
-      })
-      console.log('final list?', $scope.managePatientsList);
-    })
+          });
+      });
+    });
   }
-
-
-
-
-
-
 
   function resourcesList() {
     $http.get('/doctorDashboard/resourcesList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
@@ -249,7 +239,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
         $scope.preDoctor = response.data[0];
       });
     }
-  }
+  };
 
   $scope.edit = function(type, form, id) {
 
@@ -260,11 +250,11 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
     doctorToEdit.id = id;
 
-    doctorToEdit.firstname = $scope.editDoctor.firstname != null ? $scope.editDoctor.firstname : $scope.preDoctor.firstname;
-    doctorToEdit.lastname = $scope.editDoctor.lastname != null ? $scope.editDoctor.lastname : $scope.preDoctor.lastname;
-    doctorToEdit.phone = $scope.editDoctor.phone != null ? $scope.editDoctor.phone : $scope.preDoctor.phone;
-    doctorToEdit.email = $scope.editDoctor.email != null ? $scope.editDoctor.email : $scope.preDoctor.email;
-    doctorToEdit.username = $scope.editDoctor.username != null ? $scope.editDoctor.username : $scope.preDoctor.username;
+    doctorToEdit.firstname = $scope.editDoctor.firstname !== null ? $scope.editDoctor.firstname : $scope.preDoctor.firstname;
+    doctorToEdit.lastname = $scope.editDoctor.lastname !== null ? $scope.editDoctor.lastname : $scope.preDoctor.lastname;
+    doctorToEdit.phone = $scope.editDoctor.phone !== null ? $scope.editDoctor.phone : $scope.preDoctor.phone;
+    doctorToEdit.email = $scope.editDoctor.email !== null ? $scope.editDoctor.email : $scope.preDoctor.email;
+    doctorToEdit.username = $scope.editDoctor.username !== null ? $scope.editDoctor.username : $scope.preDoctor.username;
 
     doctorToEdit.doctorflag = 1;
 
@@ -274,7 +264,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
     } else {
       doctorToEdit.adminflag = 0;
     }
-
 
     console.log('edit', doctorToEdit);
 
@@ -306,7 +295,7 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
 
     $scope.progress.addPromise($promise);
 
-  }
+  };
 
   $scope.beginDelete = function(type, id) {
 
@@ -326,13 +315,11 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
         $scope.prePatient = response.data[0];
       });
     }
-  }
+  };
 
   $scope.delete = function(type, id) {
 
     idHolder = {id: id};
-
-    console.log('delete id:', idHolder)
 
     if (type === 'manageDoctors' || type === 'managePatients') {
       console.log('manageDoctorsDelete hit');
@@ -347,7 +334,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
           }
         })
         .error(function(data, status, headers, config) {
-          // $scope.progress = data;
           alert('There was a network error. Try again later.');
           $log.error(data);
         })
@@ -358,12 +344,9 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
           if (type === 'managePatients') {
             managePatientsList();
           }
-        })
+        });
       }
-    }
-
-
-
+    };
 
   $scope.logout = function() {
     //TODO: create proper logout service
@@ -374,11 +357,6 @@ app.controller('doctorDashboardController', ['$scope', '$http', '$location', '$l
   $scope.goTo = function(locationId) {
     anchorSmoothScroll.scrollTo(locationId);
   };
-
-  // $scope.edit = function(type, id)
-  // {
-  //   console.log('edit:', type, id);
-  // }
 
   function initializePage() {
     myPatientList();
