@@ -1,5 +1,8 @@
 var express = require('express');
 var path = require('path');
+var pg = require('pg');
+var connection = require('../modules/connection');
+
 var router = express.Router();
 
 router.get('/myFoodsList/:id', function(req, res, next) {
@@ -82,17 +85,20 @@ router.get('/libraryList/:id', function(req, res, next) {
 
 router.get('/myDoctor', function(req, res, next) {
 
-  console.log('resources list hit');
-  var id = req.params.id;
-  var myDoctor = {};
+  var id = req.query.id;
+  var myDoctor = [];
 
   pg.connect(connection, function(err, client, done) {
 
-    var doctorID = client.query('SELECT doctorID FROM doctorpatient WHERE activeflag = $1 AND patientID = $2', ['1', id]);
+    // var doctorID = client.query('SELECT doctorID FROM doctorpatient WHERE activeflag = $1 AND patientID = $2', ['1', id]);
 
-    var query = client.query('SELECT * FROM userprofile WHERE userID = $1', [doctorID]);
+    var query = client.query('SELECT * FROM userprofile WHERE id IN (SELECT doctorID FROM doctorpatient WHERE activeflag = $1 AND patientID = $2)', ['1', id]);
 
-    myDoctor = query;                   //TODO: This may not be right
+    // myDoctor = query;                   //TODO: This may not be right
+
+    query.on('row', function(row) {
+      myDoctor.push(row);
+    });
 
     query.on('end', function() {
       client.end();

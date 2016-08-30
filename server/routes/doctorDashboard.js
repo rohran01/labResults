@@ -11,7 +11,7 @@ router.get('/myPatientList', function(req, res, next) {
 
   pg.connect(connection, function(err, client, done) {
 
-    var query = client.query('SELECT * FROM userprofile WHERE id IN (SELECT patientid FROM doctorpatient WHERE doctorid = $1)', [id]);
+    var query = client.query('SELECT firstname, lastname, phone, email FROM userprofile WHERE id IN (SELECT patientid FROM doctorpatient WHERE doctorid = $1)', [id]);
 
     query.on('row', function(row) {
       patientList.push(row);

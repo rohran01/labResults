@@ -62,38 +62,38 @@ app.controller('loginController', ['$scope', '$http', '$location', 'AuthService'
 
 app.controller('patientDashboardController', ['$scope', '$http', '$location', 'anchorSmoothScroll', 'AuthService', function($scope, $http, $location, anchorSmoothScroll, AuthService) {
 
+  $scope.currentUser = AuthService.getUserStatus();
   $scope.myFoodsList = [];
   $scope.diaryList = [];
   $scope.libraryList = [];
   $scope.myDoctor = {};
-  $scope.currentUser = AuthService.getUserStatus();
   // console.log($scope.currentUser);
 
   function myFoodsList()
   {
-    $http.get('/patientDashboard/myFoodsList/', {params: {id: $scope.currentUser}}).then(function(response) {
+    $http.get('/patientDashboard/myFoodsList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.myFoodsList = response.data;
     });
   }
 
   function diaryList()
   {
-    $http.get('/patientDashboard/diaryList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+    $http.get('/patientDashboard/diaryList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.diaryList = response.data;
     });
   }
 
   function libraryList()
   {
-    $http.get('/patientDashboard/libraryList/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+    $http.get('/patientDashboard/libraryList/', {params: {id: $scope.currentUser.id}}).then(function(response) {
       $scope.libraryList = response.data;
     });
   }
 
   function myDoctor()
   {
-    $http.get('/patientDashboard/myDoctor', {params: {id: $scope.currentUser.ID}}).then(function(response) {
-      $scope.myDoctor = response.data;
+    $http.get('/patientDashboard/myDoctor/', {params: {id: $scope.currentUser.id}}).then(function(response) {
+      $scope.myDoctor = response.data[0];
       console.log($scope.myDoctor);
     });
   }
