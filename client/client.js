@@ -92,8 +92,9 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
 
   function myDoctor()
   {
-    $http.get('/patientDashboard/myDoctor/', {params: {id: $scope.currentUser.ID}}).then(function(response) {
+    $http.get('/patientDashboard/myDoctor', {params: {id: $scope.currentUser.ID}}).then(function(response) {
       $scope.myDoctor = response.data;
+      console.log($scope.myDoctor);
     });
   }
 
@@ -107,9 +108,9 @@ app.controller('patientDashboardController', ['$scope', '$http', '$location', 'a
   };
 
   function initializePage() {
-    myFoodsList();
-    diaryList();
-    libraryList();
+    // myFoodsList();
+    // diaryList();
+    // libraryList();
     myDoctor();
   }
 
